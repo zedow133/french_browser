@@ -6,4 +6,4 @@ model = TransNetV2()
 video_frames, single_frame_predictions, all_frame_predictions = \
     model.predict_video("./videos/00001.mp4")
 
-print(video_frames, single_frame_predictions, all_frame_predictions)
+print(single_frame_predictions, all_frame_predictions)
