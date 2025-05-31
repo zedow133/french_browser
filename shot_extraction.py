@@ -91,6 +91,20 @@ def process_single_video(video_path, model, output_base_dir):
         timestamps_path = os.path.join(timestamps_dir, timestamps_filename)
         save_timestamps_file(timestamps_path, start_frame, end_frame, fps)
 
+def shot_extract(video_files, output_dir):
+    os.makedirs(output_dir, exist_ok=True)
+
+    try:
+        model = TransNetV2()
+    except Exception as e:
+        print(f"TransNetV2 loading failed: {e}")
+        sys.exit(1)
+    
+    for i, video_file in enumerate(video_files, 1):
+        print(f"{'='*60}")
+        print(f"VIDEO PROGRESSION: {i}/{len(video_files)}")
+        process_single_video(video_file, model, output_dir)
+
 def main():
     if len(sys.argv) not in [2, 3]:
         print("Usage: python shot_extraction.py <video_directory> [output_directory]")
@@ -104,24 +118,13 @@ def main():
         print(f"Input folder not found: {input_dir}")
         sys.exit(1)
     
-    os.makedirs(output_dir, exist_ok=True)
-    
     video_files = [str(file_path) for file_path in Path(input_dir).rglob('*')]
     
     if not video_files:
         print(f"No video file found in: {input_dir}")
         sys.exit(1)
-    
-    try:
-        model = TransNetV2()
-    except Exception as e:
-        print(f"TransNetV2 loading failed: {e}")
-        sys.exit(1)
-    
-    for i, video_file in enumerate(video_files, 1):
-        print(f"{'='*60}")
-        print(f"VIDEO PROGRESSION: {i}/{len(video_files)}")
-        process_single_video(video_file, model, output_dir)
+
+    shot_extract(video_files, output_dir)
 
 if __name__ == "__main__":
     main()

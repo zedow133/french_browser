@@ -52,8 +52,15 @@ def image_similarity(imageFile, images, image_files, model, device, preprocess) 
 def embedding(imageFile, preprocess, device, model) : 
     image = preprocess(Image.open(imageFile)).unsqueeze(0).to(device)
     image_embeddings = model.encode_image(image)
-    print(image_embeddings)
     return image_embeddings
+
+def tensor_similarity(image1, image2) : 
+    cos = torch.nn.CosineSimilarity(dim=0)
+
+    similarity = cos(image1[0],image2[0]).item()
+    similarity = (similarity+1)/2
+    print("Image similarity", similarity)
+
 
 def main() : 
     device = "cuda" if torch.cuda.is_available() else "cpu"

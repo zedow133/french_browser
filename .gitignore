@@ -2,3 +2,5 @@ env/
 videos/
 TransNetV2/
 output/
+__pycache__/
+db/
