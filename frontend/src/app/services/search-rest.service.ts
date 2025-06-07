@@ -12,9 +12,12 @@ export class SearchRestService {
   constructor(private readonly http: HttpClient) { }
 
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
-    // lastValueFrom(this.http.get<Array<string>>("api/videos/shots/" + query +"")); 
-    const namesPromise: Promise<Array<string>> = Promise.resolve(['Sam', 'Alex', 'Leo', 'Leilie', 'Bernard']);
-    return namesPromise;
+    const apiUrl = '/api/search/text';
+    const url = `${apiUrl}?query=${encodeURIComponent(query)}`;
+    return lastValueFrom(this.http.get<Array<string>>(url));
+
+    // const namesPromise: Promise<Array<string>> = Promise.resolve(['Sam', 'Alex', 'Leo', 'Leilie', 'Bernard']);
+    // return namesPromise;
     
   }
 

@@ -21,4 +21,8 @@ export class VideoBrowsingComponent {
     this.router.navigate(['video', shotId])
   }
 
+  trim(shot : string) {
+    return shot.split('_')[0]; // '00001_1' → '00001'
+  }
+
 }

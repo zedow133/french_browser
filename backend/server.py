@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List, Optional, Dict, Any
 from util_db import ShotsDatabase
 import uvicorn
+from fastapi.staticfiles import StaticFiles
 
 from analysis_keyframes_clip import init as clip_init, text_query_keyframes, image_similarity
 from torch import load as torch_load
@@ -31,7 +32,9 @@ images_embeddings = torch_load('./db/all_keyframes_embeddings.pt')
 with open('./db/all_keyframes_names.pkl', 'rb') as f:
     images_names = pickle.load(f)
 
-@app.get("/")
+app.mount("/media", StaticFiles(directory="db/data"), name="media")
+
+@app.get("/api/")
 async def root():
     """Root of the API"""
     return {"message": "API french_browser - alive"}
@@ -42,7 +45,7 @@ class ShotResponse(BaseModel):
     start_stamp: int
     end_stamp: int
 
-@app.get("/get_shot/{shot_id}", response_model=ShotResponse)
+@app.get("/api/get_shot/{shot_id}", response_model=ShotResponse)
 async def get_shot(shot_id: str):
     """Get a shot by its ID"""
     shot = db.get_shot(shot_id)
@@ -50,13 +53,13 @@ async def get_shot(shot_id: str):
         raise HTTPException(status_code=404, detail="Shot not found")
     return shot
 
-@app.get("/search/text/")
+@app.get("/api/search/text/")
 async def search_text(query: str = Query()):
     """Perform similarity search, given a text query to find similar images"""
     top_k = text_query_keyframes(query, images_embeddings, images_names, 5, model, device)
     return top_k
 
-@app.get("/search/similarity/")
+@app.get("/api/search/similarity/")
 async def search_similarity(shot_id: str):
     """Perform similarity search, given an image query to find similar images"""
     found, keyframe_embedding = db.get_embedding(shot_id)
