@@ -1,10 +1,17 @@
 from util_db import ShotsDatabase
+import pickle
 import torch
-import clip
-from analysis_keyframes_clip import embedding, tensor_similarity
+import os
+from analysis_keyframes_clip import init as clip_init, search
 
 db = ShotsDatabase("./db")
-# device = "cuda" if torch.cuda.is_available() else "cpu"
-# model, preprocess = clip.load("ViT-B/32", device=device)
-# tensor_similarity(db.get_shot("00179_1")['embedding'], embedding("./db/data/00179/keyframes/00179_2.jpg", preprocess, device, model))
-print(db.get_shot("00179_1"))
+
+images_embeddings = torch.load('./db/all_keyframes_embeddings.pt')
+with open('./db/all_keyframes_names.pkl', 'rb') as f:
+    images_names = pickle.load(f)
+
+device, model, preprocess = clip_init()
+
+top_k=search("a girl", images_embeddings, images_names, 5, model, device)
+
+print(top_k)

@@ -1,0 +1,12 @@
+fastapi==0.115.12
+torch==2.7.1+cu118
+torchvision==0.22.1+cu118
+ftfy==6.3.1
+regex==2024.11.6
+tqdm==4.67.1
+clip @ git+https://github.com/openai/CLIP.git@dcba3cb2e2827b402d2701e7e1c7d9fed8a20ef1
+tensorflow==2.19.0
+pillow==11.0.0
+ffmpeg-python==0.2.0
+uvicorn==0.34.3
+transnetv2==1.0.0

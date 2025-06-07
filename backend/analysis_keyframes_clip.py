@@ -4,69 +4,77 @@ import clip
 import itertools
 from PIL import Image
 
-def text_query_keyframes(text, images, image_files, model, device):
+def init():
+    device = "cuda" if torch.cuda.is_available() else "cpu"
+    model, preprocess = clip.load("ViT-B/32", device=device)
+    return device, model, preprocess
+
+def text_query_keyframes(text, images_embeddings, images_names, k, model, device):
     query = clip.tokenize([text]).to(device)
 
     with torch.no_grad():
-        images_tensor = torch.cat(images) # transform la list en Tensor
-        images_features = model.encode_image(images_tensor)
         text_features = model.encode_text(query)
 
-    # Normalisation pour similarité cosine
-    images_features /= images_features.norm(dim=-1, keepdim=True)
+    # Normalization for cosine similarity
+    images_embeddings /= images_embeddings.norm(dim=-1, keepdim=True)
     text_features /= text_features.norm(dim=-1, keepdim=True)
 
-    # Calcul similarités
-    similarities = (images_features @ text_features.T).squeeze(1)
+    # Similarity computation
+    similarities = (images_embeddings @ text_features.T).squeeze(1)
+    values, indexes = similarities.topk(k)
+
+    # Results display (for logging and debugging purpose)
+    top_k=[]
+    print(f"\nTop {k} images for the request : {text} \n")
+    for i, idx in enumerate(indexes):
+        filename = images_names[idx]
+        top_k.append(filename)
+        score = values[i].item()
+        print(f"{i+1}. {filename} — Similarity : {score:.4f}")
+
+    return top_k
+
+def image_similarity(image_embedding, images_embeddings, images_names, k) : 
+    # Normalization for cosine similarity
+    images_embeddings /= images_embeddings.norm(dim=-1, keepdim=True)
+    image_embedding /= image_embedding.norm(dim=-1, keepdim=True)
+
+    # Similarity computation
+    similarities = (images_embeddings @ image_embedding.T).squeeze(1)
     values, indices = similarities.topk(5)
 
-    # Affichage des résultats
-    print(f"\nTop 5 images pour la requête : {text} \n")
+    # Results display (for logging and debugging purpose)
+    top_k=[]
+    print(f"\nTop {k} similar images : \n")
     for i, idx in enumerate(indices):
-        filename = image_files[idx]
+        filename = images_names[idx]
+        top_k.append(filename)
         score = values[i].item()
-        print(f"{i+1}. {filename} — Similarité : {score:.4f}")
-
-
-def image_similarity(imageFile, images, image_files, model, device, preprocess) : 
-    image = preprocess(Image.open(imageFile)).unsqueeze(0).to(device)
-    with torch.no_grad():
-        images_tensor = torch.cat(images) # transform la list en Tensor
-        images_features = model.encode_image(images_tensor)
-        image_features =  model.encode_image(image)
-
-    images_features /= images_features.norm(dim=-1, keepdim=True)
-    image_features /= image_features.norm(dim=-1, keepdim=True)
-
-    # Calcul similarités
-    similarities = (images_features @ image_features.T).squeeze(1)
-    values, indices = similarities.topk(5)
-
-    # Affichage des résultats
-    print(f"\nTop 5 images pour la requête : {imageFile} \n")
-    for i, idx in enumerate(indices):
-        filename = image_files[idx]
-        score = values[i].item()
-        print(f"{i+1}. {filename} — Similarité : {score:.4f}")
+        print(f"{i+1}. {filename} — Similarity : {score:.4f}")
     
-def embedding(imageFile, preprocess, device, model) : 
+    return top_k
+    
+def single_embedding(imageFile, preprocess, device, model) : 
     image = preprocess(Image.open(imageFile)).unsqueeze(0).to(device)
     image_embeddings = model.encode_image(image)
     return image_embeddings
 
-def tensor_similarity(image1, image2) : 
-    cos = torch.nn.CosineSimilarity(dim=0)
+def all_embeddings(image_paths, preprocess, device, model):
+    preprocessed_images = []
+    for image_path in image_paths:
+        preprocessed_image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+        preprocessed_images.append(preprocessed_image)
+    
+    with torch.no_grad():
+        images_tensor = torch.cat(preprocessed_images)
+        images_features = model.encode_image(images_tensor)
 
-    similarity = cos(image1[0],image2[0]).item()
-    similarity = (similarity+1)/2
-    print("Image similarity", similarity)
-
+    return images_features
 
 def main() : 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    model, preprocess = clip.load("ViT-B/32", device=device)
+    device, model, preprocess = init()
 
-    folder_path = "keyframes_test"
+    folder_path = "db/data/00139/keyframes"
     images = []
     image_files = []
 
@@ -76,9 +84,9 @@ def main() :
         images.append(image)
         image_files.append(filename)
     
-    #text_query_keyframes("a planet with black and white stripes", images, image_files, model, device)
+    text_query_keyframes("a planet with black and white stripes", images, image_files, model, device)
     #image_similarity("keyframes_test/keyframe_shot_003419.jpg", images, image_files, model, device, preprocess)
-    embedding("keyframes_test/keyframe_shot_003419.jpg", preprocess, device, model)
+    #text_query_keyframes("db/data/00139/keyframes/00139_1.jpg", preprocess, device, model)
 
 if __name__ == "__main__":
     main()

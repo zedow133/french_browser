@@ -17,8 +17,6 @@ class ShotsDatabase:
             CREATE TABLE IF NOT EXISTS shots (
                 shot_id TEXT PRIMARY KEY,
                 source TEXT NOT NULL,
-                keyframe_path TEXT NOT NULL,
-                clip_path TEXT NOT NULL,
                 start_stamp INTEGER NOT NULL,
                 end_stamp INTEGER NOT NULL,
                 embedding BLOB NOT NULL
@@ -32,7 +30,6 @@ class ShotsDatabase:
         tensor_data = {
             'data': tensor.cpu().detach().numpy(),
             'device': str(tensor.device),
-            'requires_grad': tensor.requires_grad
         }
         return pickle.dumps(tensor_data)
     
@@ -42,27 +39,19 @@ class ShotsDatabase:
         
         if data['device'] != 'cpu':
             tensor = tensor.to(data['device'])
-        
-        if data['requires_grad']:
-            tensor.requires_grad_(True)
-            
+
         return tensor
     
-    def insert_shot(self, shot_id: str, source: str, keyframe_path: str, 
-                   clip_path: str, start_stamp: int, end_stamp: int, 
+    def insert_shot(self, shot_id: str, source: str, 
+                   start_stamp: int, end_stamp: int, 
                    embedding: torch.Tensor) -> bool:
         try:
             conn = sqlite3.connect(self.db_path)
             cursor = conn.cursor()
             
-            # Sérialiser le tensor
             embedding_blob = self._serialize_tensor(embedding)
             
-            cursor.execute('''
-                INSERT INTO shots (shot_id, source, keyframe_path, clip_path, 
-                                 start_stamp, end_stamp, embedding)
-                VALUES (?, ?, ?, ?, ?, ?, ?)
-            ''', (shot_id, source, keyframe_path, clip_path, start_stamp, end_stamp, embedding_blob))
+            cursor.execute('''INSERT INTO shots (shot_id, source, start_stamp, end_stamp, embedding) VALUES (?, ?, ?, ?, ?)''', (shot_id, source, start_stamp, end_stamp, embedding_blob))
             
             conn.commit()
             conn.close()
@@ -82,65 +71,45 @@ class ShotsDatabase:
         conn.close()
         
         if row:
-            embedding = self._deserialize_tensor(row[6])
-            
             return {
                 'shot_id': row[0],
                 'source': row[1],
-                'keyframe_path': row[2],
-                'clip_path': row[3],
-                'start_stamp': row[4],
-                'end_stamp': row[5],
-                'embedding': embedding
+                'start_stamp': row[2],
+                'end_stamp': row[3],
             }
         return None
     
-    def get_all_shots(self, limit: Optional[int] = None) -> List[Dict[str, Any]]:
+    def get_embedding(self, shot_id: str) -> Optional[Any]:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        if limit:
-            cursor.execute('SELECT * FROM shots LIMIT ?', (limit,))
-        else:
-            cursor.execute('SELECT * FROM shots')
+        cursor.execute('SELECT * FROM shots WHERE shot_id = ?', (shot_id,))
+        row = cursor.fetchone()
+        conn.close()
+        
+        if row:
+            return True, self._deserialize_tensor(row[4])
+        return False, None
+
+    def get_all_shots(self) -> List[Dict[str, Any]]:
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT * FROM shots')
         
         rows = cursor.fetchall()
         conn.close()
         
         shots = []
         for row in rows:
-            embedding = self._deserialize_tensor(row[6])
+            embedding = self._deserialize_tensor(row[4])
             
             shots.append({
                 'shot_id': row[0],
                 'source': row[1],
-                'keyframe_path': row[2],
-                'clip_path': row[3],
-                'start_stamp': row[4],
-                'end_stamp': row[5],
+                'start_stamp': row[2],
+                'end_stamp': row[3],
                 'embedding': embedding
-            })
-        
-        return shots
-    
-    def search_by_source(self, source: str) -> List[Dict[str, Any]]:
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT * FROM shots WHERE source LIKE ?', (f'%{source}%',))
-        rows = cursor.fetchall()
-        conn.close()
-        
-        shots = []
-        for row in rows:
-            shots.append({
-                'shot_id': row[0],
-                'source': row[1],
-                'keyframe_path': row[2],
-                'clip_path': row[3],
-                'start_stamp': row[4],
-                'end_stamp': row[5],
-                'embedding': json.loads(row[6])
             })
         
         return shots

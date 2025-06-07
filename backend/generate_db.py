@@ -1,13 +1,12 @@
 import os
 import sys
 from pathlib import Path
-
 import torch
-import clip
+import pickle
 from transnetv2 import TransNetV2
 
 from shot_extraction import get_video_fps, detect_shots_with_transnet, extract_keyframe, extract_video_clip
-from analysis_keyframes_clip import embedding
+from analysis_keyframes_clip import init as clip_init, single_embedding, all_embeddings
 from util_db import ShotsDatabase
 
 def process_single_video(video_path, transnet_model, clip_model, preprocess, device, db, data_dir):
@@ -41,13 +40,11 @@ def process_single_video(video_path, transnet_model, clip_model, preprocess, dev
         clip_path = os.path.join(clips_dir, clip_filename)
         extract_video_clip(video_path, start_frame, end_frame, fps, clip_path)
 
-        image_embedding = embedding(keyframe_path, preprocess, device, clip_model)
+        image_embedding = single_embedding(keyframe_path, preprocess, device, clip_model)
 
         db.insert_shot(
             shot_id = shot_id,
             source = video_name,
-            keyframe_path = keyframe_path,
-            clip_path = clip_path,
             start_stamp = round((start_frame / fps) * 1000),
             end_stamp = round((end_frame / fps) * 1000),
             embedding = image_embedding
@@ -84,21 +81,39 @@ def main():
     #Database creation
     db = ShotsDatabase(db_dir)
 
-    #Models loading
+    # Models loading
     try:
         transnet_model = TransNetV2()
     except Exception as e:
         print(f"TransNetV2 loading failed: {e}")
         sys.exit(1)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    clip_model, preprocess = clip.load("ViT-B/32", device=device)
+    device, clip_model, preprocess = clip_init()
     
     #Videos processing
     for i, video_file in enumerate(video_files, 1):
         print(f"{'='*60}")
         print(f"VIDEO PROGRESSION: {i}/{len(video_files)}")
         process_single_video(video_file, transnet_model, clip_model, preprocess, device, db, data_dir)
+
+    #All keyframes embedding
+    keyframes_paths = []
+    keyframes_names = []
+
+    for source_name in os.listdir(data_dir):
+        source_dir = os.path.join(data_dir, source_name)
+        keyframe_dir = os.path.join(source_dir, 'keyframes')
+        for keyframe_name in os.listdir(keyframe_dir):
+            keyframes_names.append(keyframe_name[:-4])
+            keyframe_path = os.path.join(keyframe_dir, keyframe_name)
+            keyframes_paths.append(keyframe_path)
+    
+    all_keyframes_embeddings = all_embeddings(keyframes_paths, preprocess, device, clip_model)
+
+    torch.save(all_keyframes_embeddings, os.path.join(db_dir, 'all_keyframes_embeddings.pt'))
+
+    with open(os.path.join(db_dir, 'all_keyframes_names.pkl'), 'wb') as f:
+        pickle.dump(keyframes_names, f)
 
 if __name__ == "__main__":
     main()
