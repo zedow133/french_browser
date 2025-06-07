@@ -6,9 +6,9 @@
       <div >
         <div *ngFor="let shot of this.videoService.shots()"> 
           <div class="video-thumbnail" (click)="openVideo(shot)">
-            <img [src]="'http://localhost:8000/media/' + trim(shot) + '/keyframes/' + shot + '.jpg'" alt="Video thumbnail">
+            <img [src]="'http://localhost:8000/media/' + this.videoService.trim(shot) + '/keyframes/' + shot + '.jpg'" alt="Video thumbnail">
             <div class="video-overlay">
-              <div class="play-icon">▶ {{ shot }}</div>
+              <div class="play-icon"> ▶ </div>
             </div>
           </div>
         </div>

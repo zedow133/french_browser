@@ -206,6 +206,49 @@
   .pagination button:hover:not(.active) {
     background: #f8f9fa;
   }
+
+  .keyframe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 16px;
+    padding: 20px;
+  }
+  
+  .keyframe-card {
+    position: relative;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .keyframe-card:hover {
+    transform: scale(1.03);
+  }
+  
+  .keyframe-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  .overlay {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+    color: white;
+    text-align: center;
+    padding: 6px 0;
+  }
+  
+  .label {
+    font-weight: bold;
+    font-size: 0.9rem;
+  }
+  
   
   /* Responsive */
   @media (max-width: 768px) {
@@ -222,4 +265,5 @@
       grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 10px;
     }
+  
   }

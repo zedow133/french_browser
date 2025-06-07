@@ -1,6 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { VideoService } from '../../services/video.service';
 
 @Component({
   selector: 'app-overview-video',
@@ -15,6 +16,10 @@ export class OverviewVideoComponent {
   keyframes: string[] = [];
   query = "";
 
+  constructor(public readonly videoService : VideoService){
+
+  }
+  
   submitText() {
     console.log('Submitted text:', this.query);
   }

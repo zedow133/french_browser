@@ -17,12 +17,8 @@ export class VideoBrowsingComponent {
   }
     
   openVideo(shotId : string) {
-    // await this.service.getVideo(shotId) --> videoService.currentShot = ce truc
+    this.videoService.currentShot = shotId;
     this.router.navigate(['video', shotId])
-  }
-
-  trim(shot : string) {
-    return shot.split('_')[0]; // '00001_1' → '00001'
   }
 
 }

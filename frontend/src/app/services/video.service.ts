@@ -6,9 +6,13 @@ import { Shot } from '../models/shot';
 })
 export class VideoService {
   public shots = signal<Array<string>>([]) ;
-  public CurrentShot : string = "";
+  public currentShot : string = "";
 
   constructor() { }
+
+  trim(shot : string) {
+    return shot.split('_')[0]; // '00001_1' → '00001'
+  }
 
 
 }
