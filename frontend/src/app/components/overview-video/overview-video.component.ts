@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-overview-video',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './overview-video.component.html',
   styleUrl: './overview-video.component.css'
 })
@@ -12,13 +13,14 @@ import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 export class OverviewVideoComponent {
   videoSrc = 'assets/sample-video.mp4'; // Replace with your actual video path
   keyframes: string[] = [];
+  query = "";
 
-  submitText(input: string) {
-    console.log('Submitted text:', input);
+  submitText() {
+    console.log('Submitted text:', this.query);
   }
 
   onSubmitVideoAction(action: string) {
-    console.log('Video action:', action);
+    console.log('Video action:', action); // DRES
   }
 }
 

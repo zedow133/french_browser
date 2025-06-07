@@ -6,8 +6,9 @@
   
       <div class="text-submit">
         <h4>Submit Text</h4>
-        <input #textInput type="text" placeholder="Enter your text here" />
-        <button class="submit-text-btn" (click)="submitText(textInput.value)">Submit Text</button>
+        <label for="query" class="section-title"> Query </label>
+        <input type="text" id="query" [(ngModel)]="query" placeholder="Enter your text here">
+        <button class="submit-text-btn" (click)="submitText()">Submit Text</button>
       </div>
     </div>
   

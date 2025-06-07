@@ -4,6 +4,7 @@ import { SearchRestService } from '../../services/search-rest.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VideoBrowsingComponent } from '../video-browsing/video-browsing.component';
+import { VideoService } from '../../services/video.service';
 
 
 @Component({
@@ -16,11 +17,13 @@ import { VideoBrowsingComponent } from '../video-browsing/video-browsing.compone
 export class SearchEngineComponent {
   public query = "";
 
-  public constructor(private readonly router: Router, private readonly service : SearchRestService) {
+  public constructor(private readonly router: Router, private readonly service : SearchRestService, private readonly videoService : VideoService) {
   }
 
   resetSearch() {
     console.log("reseting");
+    this.videoService.shots.set([]);
+    this.query = "";
   }
 
   addQuery(){
@@ -30,7 +33,13 @@ export class SearchEngineComponent {
   search(){
     console.log("searching for : " + this.query);
     //  utiliser les queries pour les envoyer dans un service
-    // this.service.getVideosFromTextQuery(this.query)
+    this.service.getVideosFromTextQuery(this.query)
+    .then((list : Array<string>) => {
+      this.videoService.shots.set(list);
+    })
+    .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots : ", err); 
+    });
+    console.log(this.videoService.shots)
   }
 
 }

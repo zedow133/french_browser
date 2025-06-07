@@ -1,45 +1,31 @@
 <main class="content-area">
 
-    <!-- Affichage des vidéos / keyframes liées à la query -->
-    <!--<div *ngIf="gridNames().length > 0; else loading">
-        <div class="grid-links">
-          <div *ngFor="let grid of gridNames()"> 
-            <button class="grid-button" (click)="loadGame(grid)">{{ grid }}</button>
-          </div>
-        </div>
-      </div>-->
-      
-    <div class="video-grid">
-      <!-- Exemple d'une vignette vidéo -->
-      <div class="video-container" (click)="openVideo()">
-        <div class="video-thumbnail">
-          <img src="https://picsum.photos/400/225?random=1" alt="Video thumbnail">
-          <div class="video-overlay">
-            <div class="play-icon">▶</div>
+   <!-- Affichage des vidéos / keyframes liées à la query -->
+  <div class="video-grid">
+    <div *ngIf="this.videoService.shots().length > 0">
+      <div >
+        <div *ngFor="let shot of this.videoService.shots()"> 
+          <div class="video-thumbnail" (click)="openVideo(shot)">
+            <img src="https://picsum.photos/400/225?random=1" alt="Video thumbnail">
+            <div class="video-overlay">
+              <div class="play-icon">▶ {{ shot }}</div>
+            </div>
           </div>
         </div>
       </div>
-      
-      <!-- Répéter cette structure pour chaque vidéo dans Angular avec *ngFor -->
-      <!-- Exemple pour Angular :
-      <div class="video-thumbnail" *ngFor="let video of videos" (click)="selectVideo(video)">
-        <img [src]="video.thumbnail" [alt]="video.title">
-        <div class="video-overlay">
-          <div class="play-icon">▶</div>
-        </div>
-      </div>
-      -->
     </div>
+  </div>
 
-    <div class="pagination">
-      <button>←</button>
-      <button class="active">1</button>
-      <button>2</button>
-      <button>3</button>
-      <button>4</button>
-      <button>5</button>
-      <button>...</button>
-      <button>Next</button>
-      <button>→</button>
-    </div>
+  <div class="pagination">
+    <button>←</button>
+    <button class="active">1</button>
+    <button>2</button>
+    <button>3</button>
+    <button>4</button>
+    <button>5</button>
+    <button>...</button>
+    <button>Next</button>
+    <button>→</button>
+  </div>
+  
   </main>
