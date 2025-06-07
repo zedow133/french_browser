@@ -1,0 +1,23 @@
+<div class="container">
+    <div class="video-panel">
+      <h3>Video</h3>
+      <video [src]="videoSrc" controls width="100%"></video>
+      <button class="submit-btn" (click)="onSubmitVideoAction('submit')">Submit</button>
+  
+      <div class="text-submit">
+        <h4>Submit Text</h4>
+        <input #textInput type="text" placeholder="Enter your text here" />
+        <button class="submit-text-btn" (click)="submitText(textInput.value)">Submit Text</button>
+      </div>
+    </div>
+  
+    <div class="keyframes-panel">
+      <h3>Keyframes</h3>
+      <div class="keyframes-grid">
+        <div class="frame" *ngFor="let img of keyframes">
+          <img [src]="img" alt="Keyframe" />
+        </div>
+      </div>
+    </div>
+  </div>
+  

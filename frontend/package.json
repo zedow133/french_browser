@@ -7,7 +7,8 @@
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "serve:ssr:angular_french_browser": "node dist/angular_french_browser/server/server.mjs"
+    "serve:ssr:angular_french_browser": "node dist/angular_french_browser/server/server.mjs", 
+    "gen-dres-client": "openapi-generator-cli generate -g typescript-angular -i https://raw.githubusercontent.com/dres-dev/DRES/master/doc/oas-client.json -o openapi/dres --skip-validate-spec --additional-properties npmName=@dres-client-openapi/api,ngVersion=13.0.0,enumPropertyNaming=original"
   },
   "private": true,
   "dependencies": {
@@ -24,7 +25,8 @@
     "express": "^4.18.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.10"
+    "zone.js": "~0.14.10",
+    "@openapitools/openapi-generator-cli": "2.4.26"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.5",

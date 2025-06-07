@@ -5,75 +5,31 @@
   <div class="main-container">
     <aside class="sidebar">
       <div class="search-section">
-        <button class="btn btn-primary">New Search</button>
+        <button class="btn btn-primary" (click)="resetSearch()">New Search</button>
       </div>
   
       <div class="form-group">
-        <label class="section-title">Dataset</label>
-        <select>
-          <option>V3C</option>
-          <option>Autre dataset</option>
-        </select>
+        <label class="section-title">Dataset : V3C-1</label>
       </div>
   
       <div class="button-group">
-        <button class="btn btn-primary">Text Search</button>
-        <button class="btn btn-primary">Image Search</button>
+        <button class="btn btn-primary">Text Search</button> <!-- todo : afficher la recherche par requête textuelle -->
+        <button class="btn btn-primary">Image Search</button> <!-- todo : afficher la recherche par requête textuelle -->
       </div>
   
       <div class="form-group" style="margin-top: 30px;">
-        <input type="text" class="search-input" placeholder="example text input">
+        <label for="query" class="section-title"> Query </label>
+        <input type="text" id="query" [(ngModel)]="query" placeholder="A man on a bic">
       </div>
   
       <div class="button-group">
-        <button class="btn btn-primary">Add</button>
-        <button class="btn btn-secondary">Search</button>
+        <button class="btn btn-primary" (click)="addQuery()">Add</button>
+        <button class="btn btn-secondary" (click)="search()">Search</button>
       </div>
   
-      <div style="margin-top: 30px;">
-        <label class="section-title">Filter</label>
-        <div class="button-group">
-          <button class="btn btn-primary">Add</button>
-          <button class="btn btn-secondary">Search</button>
-        </div>
-      </div>
     </aside>
-  
-    <main class="content-area">
-      <div class="video-grid">
-        <!-- Exemple d'une vignette vidéo -->
-        <div class="video-container" (click)="openVideo()">
-          <div class="video-thumbnail">
-            <img src="https://picsum.photos/400/225?random=1" alt="Video thumbnail">
-            <div class="video-overlay">
-              <div class="play-icon">▶</div>
-            </div>
-          </div>
-        </div>
-        
-        <!-- Répéter cette structure pour chaque vidéo dans Angular avec *ngFor -->
-        <!-- Exemple pour Angular :
-        <div class="video-thumbnail" *ngFor="let video of videos" (click)="selectVideo(video)">
-          <img [src]="video.thumbnail" [alt]="video.title">
-          <div class="video-overlay">
-            <div class="play-icon">▶</div>
-          </div>
-        </div>
-        -->
-      </div>
-  
-      <div class="pagination">
-        <button>←</button>
-        <button class="active">1</button>
-        <button>2</button>
-        <button>3</button>
-        <button>4</button>
-        <button>5</button>
-        <button>...</button>
-        <button>Next</button>
-        <button>→</button>
-      </div>
-    </main>
+
+    <app-video-browsing></app-video-browsing>
   </div>
 
   
