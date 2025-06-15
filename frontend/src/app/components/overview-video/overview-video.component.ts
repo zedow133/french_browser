@@ -21,13 +21,19 @@ export class OverviewVideoComponent {
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
 
   }
+
+  homepage(){
+    this.router.navigate([''])
+  }
   
   submitText() {
     console.log('Submitted text:', this.query);
   }
 
-  onSubmitVideoAction(action: string) {
-    console.log('Video action:', action); // DRES
+  onSubmitVideoAction() {
+    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShot), 1, 2);
+    // 1 -> start
+    // 2 -> end
   }
 
   openVideo(shotId : string){
