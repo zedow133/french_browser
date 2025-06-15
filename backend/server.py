@@ -32,7 +32,8 @@ images_embeddings = torch_load('./db/all_keyframes_embeddings.pt')
 with open('./db/all_keyframes_names.pkl', 'rb') as f:
     images_names = pickle.load(f)
 
-app.mount("/media", StaticFiles(directory="db/data"), name="media")
+app.mount("/media/shots", StaticFiles(directory="db/data"))
+app.mount("/media/videos", StaticFiles(directory="videos"))
 
 @app.get("/api/")
 async def root():

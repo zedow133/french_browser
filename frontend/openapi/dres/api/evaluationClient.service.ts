@@ -121,7 +121,7 @@ export class EvaluationClientService extends BaseService {
         }
 
         const localVarHttpContext: HttpContext = options?.context ?? new HttpContext();
-
+7
 
         let responseType_: 'text' | 'json' | 'blob' = 'json';
         if (localVarHttpHeaderAcceptSelected) {

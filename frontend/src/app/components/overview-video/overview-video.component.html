@@ -1,7 +1,7 @@
 <div class="container">
     <div class="video-panel">
       <h3>Video</h3>
-      <video [src]="'http://localhost:8000/media/' + this.videoService.trim(this.videoService.currentShot) + '/clips/' + this.videoService.currentShot + '.mp4'" controls width="100%"></video>
+      <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShot) + '/clips/' + this.videoService.currentShot + '.mp4'" controls width="100%"></video>
       <button class="submit-btn" (click)="onSubmitVideoAction('submit')">Submit</button>
   
       <div class="text-submit">
