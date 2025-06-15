@@ -1,15 +1,16 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { lastValueFrom, map } from 'rxjs';
+import { last, lastValueFrom, map } from 'rxjs';
 import { Shot } from '../models/shot';
-
+import { UserService, LoginRequest, EvaluationClientService} from '../../../openapi/dres';
+import { response } from 'express';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchRestService {
 
-  constructor(private readonly http: HttpClient) { }
+  constructor(private readonly http: HttpClient, private readonly userService : UserService, private readonly evaluationClientService : EvaluationClientService) { }
 
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/text';
@@ -31,6 +32,15 @@ export class SearchRestService {
 
   public async submitVideo() : Promise<Array<string>> {
     return lastValueFrom(this.http.get<Array<string>>("api/videos/shots/submit")); 
+  }
+
+  public async login(username : string, password : string) {
+    const reponse = this.userService.postApiV2Login({username : username, password : password});
+    return lastValueFrom(reponse)
+  }
+
+  public async evalId(session : string){
+    return lastValueFrom(this.evaluationClientService.getApiV2ClientEvaluationList(session));
   }
   
   
