@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { VideoService } from '../../services/video.service';
 import { SearchRestService } from '../../services/search-rest.service';
@@ -13,16 +13,32 @@ import { Router } from '@angular/router';
   styleUrl: './overview-video.component.css'
 })
 
-export class OverviewVideoComponent {
-  videoSrc = 'assets/sample-video.mp4'; // Replace with your actual video path
-  keyframes: string[] = [];
-  query = "";
+export class OverviewVideoComponent implements AfterViewInit {
+  @ViewChild('mainVideo', { static: false }) mainVideo!: ElementRef<HTMLVideoElement>;
 
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
+
   }
-  
-  submitText() {
-    console.log('Submitted text:', this.query);
+
+  ngAfterViewInit() {
+    // Écouter l'événement loadedmetadata pour s'assurer que la vidéo est chargée
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      this.mainVideo.nativeElement.addEventListener('loadedmetadata', () => {
+        this.setVideoToStartStamp();
+      });
+      
+      // Si la vidéo est déjà chargée
+      if (this.mainVideo.nativeElement.readyState >= 1) {
+        this.setVideoToStartStamp();
+      }
+    }
+  }
+
+  setVideoToStartStamp() {
+    if (this.videoService.currentShot && this.videoService.currentShot.start_stamp && this.mainVideo) {
+      const startTimeInSeconds = this.videoService.currentShot.start_stamp / 1000;
+      this.mainVideo.nativeElement.currentTime = startTimeInSeconds;
+    }
   }
 
   onSubmitVideoAction(action: string) {
@@ -30,9 +46,32 @@ export class OverviewVideoComponent {
     console.log('Video action:', action); // DRES
   }
 
+  // Fonction pour définir le start stamp personnalisé
+  setCustomStart() {
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      this.videoService.customStartStamp = this.mainVideo.nativeElement.currentTime * 1000; // Convertir en millisecondes
+      console.log('Custom start stamp set to:', this.videoService.customStartStamp);
+    }
+  }
+
+  // Fonction pour définir le end stamp personnalisé
+  setCustomEnd() {
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      this.videoService.customEndStamp = this.mainVideo.nativeElement.currentTime * 1000; // Convertir en millisecondes
+      console.log('Custom end stamp set to:', this.videoService.customEndStamp);
+    }
+  }
+
   openVideo(shotId : string){
-    this.videoService.currentShot = shotId;
+    this.videoService.currentShotID = shotId;
     
+    this.service.getShot(shotId)
+    .then((shot : any) => {
+      this.videoService.currentShot = shot;
+    }).then(() => {
+      this.router.navigate(['video', shotId])
+    })
+
     console.log("searching for similar keyshots of video : " + shotId);
     this.service.getVideosFromSimilarity(shotId)
       .then((list : Array<string>) => {
@@ -42,7 +81,6 @@ export class OverviewVideoComponent {
       });
 
     console.log(this.videoService.similarShots)
-    this.router.navigate(['video', shotId])
   }
   
 }

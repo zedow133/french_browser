@@ -15,11 +15,7 @@ export class SearchRestService {
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/text';
     const url = `${apiUrl}?query=${encodeURIComponent(query)}`;
-    return lastValueFrom(this.http.get<Array<string>>(url));
-
-    // const namesPromise: Promise<Array<string>> = Promise.resolve(['Sam', 'Alex', 'Leo', 'Leilie', 'Bernard']);
-    // return namesPromise;
-    
+    return lastValueFrom(this.http.get<Array<string>>(url));  
   }
 
   public async getVideosFromSimilarity(shotID : string) : Promise<Array<string>> {
@@ -28,8 +24,8 @@ export class SearchRestService {
     return lastValueFrom(this.http.get<Array<string>>(url));
   }
 
-  public async getVideo(shotID : string) : Promise<string> {
-    return lastValueFrom(this.http.get<string>("api/videos/shots" + shotID + "")); 
+  public async getShot(shotID : string) : Promise<string> {
+    return lastValueFrom(this.http.get<any>("api/get_shot/" + shotID)); 
   }
 
   public async login(username : string, password : string) {

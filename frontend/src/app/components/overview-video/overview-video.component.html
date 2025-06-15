@@ -1,11 +1,37 @@
 <div class="container">
     <div class="video-panel">
       <h3>Video</h3>
-      <video [src]="'http://localhost:8000/media/videos/' + this.videoService.trim(this.videoService.currentShot) + '.mp4'" controls width="100%"></video>
+      <video #mainVideo [src]="'http://localhost:8000/media/videos/' + this.videoService.trim(this.videoService.currentShotID) + '.mp4'" controls width="100%"></video>
       <button class="submit-btn" (click)="onSubmitVideoAction('submit')">Submit</button>
 
+      <!-- Liste des informations du shot -->
+      <div class="shot-info" *ngIf="this.videoService.currentShot">
+        <div class="info-item">
+          <strong>Start stamp:</strong> {{ this.videoService.currentShot.start_stamp }} ms
+        </div>
+        <div class="info-item">
+          <strong>End stamp:</strong> {{ this.videoService.currentShot.end_stamp }} ms
+        </div>
+      </div>
+
+      <!-- Boutons pour définir les timestamps personnalisés -->
+      <div class="timestamp-controls">
+        <button class="timestamp-btn" (click)="setCustomStart()">Set start</button>
+        <button class="timestamp-btn" (click)="setCustomEnd()">Set end</button>
+      </div>
+
+      <!-- Affichage des timestamps personnalisés -->
+      <div class="custom-timestamps">
+        <div class="info-item">
+          <strong>Custom start:</strong> {{ this.videoService.customStartStamp }} ms
+        </div>
+        <div class="info-item">
+          <strong>Custom end:</strong> {{ this.videoService.customEndStamp }} ms
+        </div>
+      </div>
+
       <h3>Clip</h3>
-      <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShot) + '/clips/' + this.videoService.currentShot + '.mp4'" controls width="100%"></video>
+      <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShotID) + '/clips/' + this.videoService.currentShotID + '.mp4'" controls width="100%"></video>
     </div>
   
     <div class="keyframes-panel">

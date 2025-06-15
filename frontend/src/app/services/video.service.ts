@@ -6,8 +6,11 @@ import { Shot } from '../models/shot';
 })
 export class VideoService {
   public shots = signal<Array<string>>([]) ;
-  public similarShots = signal<Array<string>>([])
-  public currentShot : string = "";
+  public similarShots = signal<Array<string>>([]);
+  public currentShot: any = null;
+  public customStartStamp: number = 0;
+  public customEndStamp: number = 0;
+  public currentShotID : string = "";
   public sessionId : string = "";
   public evaluationId : string = "";
 
@@ -16,6 +19,4 @@ export class VideoService {
   trim(shot : string) {
     return shot.split('_')[0]; // '00001_1' → '00001'
   }
-
-
 }
