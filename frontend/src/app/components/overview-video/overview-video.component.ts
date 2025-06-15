@@ -18,9 +18,30 @@ export class OverviewVideoComponent implements AfterViewInit {
 
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
   }
-  
-  submitText() {
-    console.log('Submitted text:', this.query);
+
+  homepage(){
+    this.router.navigate([''])
+  }
+
+  ngAfterViewInit() {
+    // Écouter l'événement loadedmetadata pour s'assurer que la vidéo est chargée
+    if (this.mainVideo && this.mainVideo.nativeElement) {
+      this.mainVideo.nativeElement.addEventListener('loadedmetadata', () => {
+        this.setVideoToStartStamp();
+      });
+      
+      // Si la vidéo est déjà chargée
+      if (this.mainVideo.nativeElement.readyState >= 1) {
+        this.setVideoToStartStamp();
+      }
+    }
+  }
+
+  setVideoToStartStamp() {
+    if (this.videoService.currentShot && this.videoService.currentShot.start_stamp && this.mainVideo) {
+      const startTimeInSeconds = this.videoService.currentShot.start_stamp / 1000;
+      this.mainVideo.nativeElement.currentTime = startTimeInSeconds;
+    }
   }
 
   onSubmitVideoAction() {
@@ -51,8 +72,7 @@ export class OverviewVideoComponent implements AfterViewInit {
     this.service.getShot(shotId)
     .then((shot : any) => {
       this.videoService.currentShot = shot;
-    }).then(() => {
-      this.router.navigate(['video', shotId])
+      this.setVideoToStartStamp();
     })
 
     console.log("searching for similar keyshots of video : " + shotId);
@@ -64,6 +84,8 @@ export class OverviewVideoComponent implements AfterViewInit {
       });
 
     console.log(this.videoService.similarShots)
+
+    this.router.navigate(['video', shotId])
   }
   
 }
