@@ -1,11 +1,11 @@
 <header class="header">
-    <h1>🎥 Video Browser Showdown 2025 Systems</h1>
+    <h1>French Browser</h1>
   </header>
   
   <div class="main-container">
     <aside class="sidebar">
       <div class="search-section">
-        <button class="btn btn-primary" (click)="resetSearch()">New Search</button>
+        <button class="btn btn-primary" (click)="resetSearch()">Reset Search</button>
       </div>
   
       <div class="form-group">
@@ -19,12 +19,12 @@
   
       <div class="form-group" style="margin-top: 30px;">
         <label for="query" class="section-title"> Query </label>
-        <input type="text" id="query" [(ngModel)]="query" placeholder="A man on a bic">
+        <input type="text" id="query" [(ngModel)]="query" placeholder="A man on a bike">
       </div>
   
       <div class="button-group">
-        <button class="btn btn-primary" (click)="addQuery()">Add</button>
-        <button class="btn btn-secondary" (click)="search()">Search</button>
+        <button class="btn btn-secondary" (click)="addQuery()">Add</button>
+        <button class="btn btn-primary" (click)="search()">Search</button>
       </div>
   
     </aside>

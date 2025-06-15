@@ -123,12 +123,12 @@
     overflow-y: auto;
   }
   
-  .video-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 15px;
-    margin-bottom: 20px;
-  }
+.video-grid {
+  display: grid;
+  gap: 15px;
+  margin-bottom: 20px;
+  grid-template-columns: repeat(6, 1fr);
+}
   
   .video-thumbnail {
     position: relative;
@@ -209,7 +209,7 @@
 
   .keyframe-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(10, 1fr);
     gap: 16px;
     padding: 20px;
   }

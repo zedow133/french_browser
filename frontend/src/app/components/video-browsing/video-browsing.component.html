@@ -1,31 +1,12 @@
 <main class="content-area">
 
-   <!-- Affichage des vidéos / keyframes liées à la query -->
-  <div class="video-grid">
-    <div *ngIf="this.videoService.shots().length > 0">
-      <div >
-        <div *ngFor="let shot of this.videoService.shots()"> 
-          <div class="video-thumbnail" (click)="openVideo(shot)">
-            <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(shot) + '/keyframes/' + shot + '.jpg'" alt="Video thumbnail">
-            <div class="video-overlay">
-              <div class="play-icon"> ▶ </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="pagination">
-    <button>←</button>
-    <button class="active">1</button>
-    <button>2</button>
-    <button>3</button>
-    <button>4</button>
-    <button>5</button>
-    <button>...</button>
-    <button>Next</button>
-    <button>→</button>
-  </div>
-  
-  </main>
+  <!-- Affichage des vidéos / keyframes liées à la query -->
+ <div class="video-grid">
+   <div *ngFor="let shot of this.videoService.shots()" class="video-thumbnail" (click)="openVideo(shot)">
+     <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(shot) + '/keyframes/' + shot + '.jpg'" alt="Video thumbnail">
+     <div class="video-overlay">
+       <div class="play-icon"> ▶ </div>
+     </div>
+   </div>
+ </div>  
+</main>
