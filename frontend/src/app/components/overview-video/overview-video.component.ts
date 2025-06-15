@@ -45,7 +45,7 @@ export class OverviewVideoComponent implements AfterViewInit {
   }
 
   onSubmitVideoAction() {
-    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShot), 1, 2);
+    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), 1, 2);
     // 1 -> start
     // 2 -> end
   }
