@@ -2,15 +2,17 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { last, lastValueFrom, map } from 'rxjs';
 import { Shot } from '../models/shot';
-import { UserService, LoginRequest, EvaluationClientService, ApiClientAnswer} from '../../../openapi/dres';
-import { response } from 'express';
+import { UserService, LoginRequest, EvaluationClientService, ApiClientAnswer, SubmissionService, ApiClientSubmission} from '../../../openapi/dres';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SearchRestService {
 
-  constructor(private readonly http: HttpClient, private readonly userService : UserService, private readonly evaluationClientService : EvaluationClientService) { }
+  constructor(private readonly http: HttpClient, 
+    private readonly userService : UserService, 
+    private readonly evaluationClientService : EvaluationClientService,
+    private readonly submissionService : SubmissionService) { }
 
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/text';
@@ -37,8 +39,25 @@ export class SearchRestService {
     return lastValueFrom(this.evaluationClientService.getApiV2ClientEvaluationList(session));
   }
 
-  public async submitVideo(session : string, taskName : string, answers : Array<ApiClientAnswer>){
-
+  public async submitVideo(evaluationId : string, sessionId : string, mediaName : string, start : number, end : number, text? : string){
+    const submission: ApiClientSubmission = {
+      answerSets: [
+        {
+          taskId : "",
+          taskName: "",
+          answers: [
+            {
+              text: text,
+              mediaItemName: mediaName,
+              mediaItemCollectionName: 'IVADL',
+              start: start,
+              end: end
+            }
+          ]
+        }
+      ]
+    };
+    return lastValueFrom(this.submissionService.postApiV2SubmitByEvaluationId(evaluationId, submission, sessionId))
   }
   
   
