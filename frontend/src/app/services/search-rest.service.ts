@@ -23,7 +23,9 @@ export class SearchRestService {
   }
 
   public async getVideosFromSimilarity(shotID : string) : Promise<Array<string>> {
-    return lastValueFrom(this.http.get<Array<string>>("api/videos/shots/similarity" + shotID +"")); 
+    const apiUrl = '/api/search/similarity/';
+    const url = `${apiUrl}?shot_id=${encodeURIComponent(shotID)}`;
+    return lastValueFrom(this.http.get<Array<string>>(url));
   }
 
   public async getVideo(shotID : string) : Promise<string> {

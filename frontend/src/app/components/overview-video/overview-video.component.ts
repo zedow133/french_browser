@@ -19,7 +19,6 @@ export class OverviewVideoComponent {
   query = "";
 
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
-
   }
   
   submitText() {
@@ -27,6 +26,7 @@ export class OverviewVideoComponent {
   }
 
   onSubmitVideoAction(action: string) {
+    console.log(this.videoService.similarShots)
     console.log('Video action:', action); // DRES
   }
 
