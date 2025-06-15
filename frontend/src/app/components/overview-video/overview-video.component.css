@@ -267,6 +267,37 @@
   .pagination button:hover:not(.active) {
     background: #f8f9fa;
   }
+
+  .timestamp-btn {
+    background-color: #3498db;
+    color: white;
+    border: none;
+    padding: 6px 12px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .timestamp-btn:hover {
+    background-color: #2980b9;
+  }
+
+  .custom-timestamps {
+    flex-direction: row;
+    flex: 1;
+    margin: 10px 0;
+    padding: 10px;
+    background-color: #e8f5e8;
+    border-radius: 4px;
+    border: 1px solid #c3e6cb;
+  }
+
+  .timestamp-controls {
+    display: flex;
+    gap: 10px;
+    margin: 10px 0;
+  }
   
   /* Responsive */
   @media (max-width: 768px) {

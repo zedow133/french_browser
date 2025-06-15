@@ -45,7 +45,7 @@ export class OverviewVideoComponent implements AfterViewInit {
   }
 
   onSubmitVideoAction() {
-    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), 1, 2);
+    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), this.videoService.customStartStamp, this.videoService.customEndStamp);
     // 1 -> start
     // 2 -> end
   }
@@ -53,7 +53,7 @@ export class OverviewVideoComponent implements AfterViewInit {
   // Fonction pour définir le start stamp personnalisé
   setCustomStart() {
     if (this.mainVideo && this.mainVideo.nativeElement) {
-      this.videoService.customStartStamp = this.mainVideo.nativeElement.currentTime * 1000; // Convertir en millisecondes
+      this.videoService.customStartStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000); // Convertir en millisecondes
       console.log('Custom start stamp set to:', this.videoService.customStartStamp);
     }
   }
@@ -61,7 +61,7 @@ export class OverviewVideoComponent implements AfterViewInit {
   // Fonction pour définir le end stamp personnalisé
   setCustomEnd() {
     if (this.mainVideo && this.mainVideo.nativeElement) {
-      this.videoService.customEndStamp = this.mainVideo.nativeElement.currentTime * 1000; // Convertir en millisecondes
+      this.videoService.customEndStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000); // Convertir en millisecondes
       console.log('Custom end stamp set to:', this.videoService.customEndStamp);
     }
   }
@@ -72,6 +72,8 @@ export class OverviewVideoComponent implements AfterViewInit {
     this.service.getShot(shotId)
     .then((shot : any) => {
       this.videoService.currentShot = shot;
+      this.videoService.customStartStamp = shot.start_stamp;
+      this.videoService.customEndStamp = shot.end_stamp;
       this.setVideoToStartStamp();
     })
 

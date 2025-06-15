@@ -23,6 +23,8 @@ export class VideoBrowsingComponent {
     this.service.getShot(shotId)
       .then((shot : any) => {
         this.videoService.currentShot = shot;
+        this.videoService.customStartStamp = shot.start_stamp;
+        this.videoService.customEndStamp = shot.end_stamp;
       }).then(() => {
         this.router.navigate(['video', shotId])
       });
