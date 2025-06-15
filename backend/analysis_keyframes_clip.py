@@ -41,17 +41,18 @@ def image_similarity(image_embedding, images_embeddings, images_names, k) :
 
     # Similarity computation
     similarities = (images_embeddings @ image_embedding.T).squeeze(1)
-    values, indices = similarities.topk(5)
+    values, indices = similarities.topk(k+1)
 
     # Results display (for logging and debugging purpose)
     top_k=[]
     print(f"\nTop {k} similar images : \n")
     for i, idx in enumerate(indices):
-        filename = images_names[idx]
-        top_k.append(filename)
-        score = values[i].item()
-        print(f"{i+1}. {filename} — Similarity : {score:.4f}")
-    
+        if i != 0:
+            filename = images_names[idx]
+            top_k.append(filename)
+            score = values[i].item()
+            print(f"{i+1}. {filename} — Similarity : {score:.4f}")
+        
     return top_k
     
 def single_embedding(imageFile, preprocess, device, model) : 

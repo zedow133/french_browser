@@ -19,7 +19,6 @@ export class OverviewVideoComponent {
   query = "";
 
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
-
   }
 
   homepage(){

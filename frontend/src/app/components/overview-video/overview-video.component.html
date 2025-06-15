@@ -4,31 +4,19 @@
 <div class="container">
     <div class="video-panel">
       <h3>Video</h3>
+      <video [src]="'http://localhost:8000/media/videos/' + this.videoService.trim(this.videoService.currentShot) + '.mp4'" controls width="100%"></video>
+      <button class="submit-btn" (click)="onSubmitVideoAction('submit')">Submit</button>
+
+      <h3>Clip</h3>
       <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShot) + '/clips/' + this.videoService.currentShot + '.mp4'" controls width="100%"></video>
-      <button class="submit-btn" (click)="onSubmitVideoAction()">Submit</button>
-  
-      <div class="text-submit">
-        <h4>Submit Text</h4>
-        <label for="query" class="section-title"> Query </label>
-        <input type="text" id="query" [(ngModel)]="query" placeholder="Enter your text here">
-        <button class="submit-text-btn" (click)="submitText()">Submit Text</button>
-      </div>
     </div>
   
     <div class="keyframes-panel">
-      <h3>Keyframes</h3>
+      <h3>Similar keyframes</h3>
       <div class="keyframes-grid">
-        <div class="frame">
-          <div *ngFor="let img of this.videoService.similarShots()"> 
-            <div class="video-thumbnail" (click)="openVideo(img)">
-              <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(img) + '/keyframes/' + img + '.jpg'" alt="Video thumbnail">
-              <div class="video-overlay">
-                <div class="play-icon"> ▶ </div>
-              </div>
-            </div>
-          </div>
+        <div class="frame video-thumbnail" *ngFor="let img of this.videoService.similarShots()" (click)="openVideo(img)">
+          <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(img) + '/keyframes/' + img + '.jpg'" alt="Video thumbnail">
+        </div>
       </div>
     </div>
   </div>
-  
-  
