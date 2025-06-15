@@ -15,10 +15,17 @@
     <div class="keyframes-panel">
       <h3>Keyframes</h3>
       <div class="keyframes-grid">
-        <div class="frame" *ngFor="let img of keyframes">
-          <img [src]="img" alt="Keyframe" />
-        </div>
+        <div class="frame">
+          <div *ngFor="let img of this.videoService.similarShots()"> 
+            <div class="video-thumbnail" (click)="openVideo(img)">
+              <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(img) + '/keyframes/' + img + '.jpg'" alt="Video thumbnail">
+              <div class="video-overlay">
+                <div class="play-icon"> ▶ </div>
+              </div>
+            </div>
+          </div>
       </div>
     </div>
   </div>
+  
   

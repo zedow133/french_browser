@@ -6,6 +6,7 @@ import { Shot } from '../models/shot';
 })
 export class VideoService {
   public shots = signal<Array<string>>([]) ;
+  public similarShots = signal<Array<string>>([])
   public currentShot : string = "";
   public sessionId : string = "";
   public evaluationId : string = "";

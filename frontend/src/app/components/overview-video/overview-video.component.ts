@@ -2,6 +2,8 @@ import { CommonModule } from '@angular/common';
 import { Component, Input, Output, EventEmitter, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { VideoService } from '../../services/video.service';
+import { SearchRestService } from '../../services/search-rest.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-overview-video',
@@ -16,7 +18,7 @@ export class OverviewVideoComponent {
   keyframes: string[] = [];
   query = "";
 
-  constructor(public readonly videoService : VideoService){
+  constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
 
   }
   
@@ -27,6 +29,22 @@ export class OverviewVideoComponent {
   onSubmitVideoAction(action: string) {
     console.log('Video action:', action); // DRES
   }
+
+  openVideo(shotId : string){
+    this.videoService.currentShot = shotId;
+    
+    console.log("searching for similar keyshots of video : " + shotId);
+    this.service.getVideosFromSimilarity(shotId)
+      .then((list : Array<string>) => {
+        this.videoService.similarShots.set(list);
+      })
+      .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
+      });
+
+    console.log(this.videoService.similarShots)
+    this.router.navigate(['video', shotId])
+  }
+  
 }
 
 

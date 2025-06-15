@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { last, lastValueFrom, map } from 'rxjs';
 import { Shot } from '../models/shot';
-import { UserService, LoginRequest, EvaluationClientService} from '../../../openapi/dres';
+import { UserService, LoginRequest, EvaluationClientService, ApiClientAnswer} from '../../../openapi/dres';
 import { response } from 'express';
 
 @Injectable({
@@ -30,10 +30,6 @@ export class SearchRestService {
     return lastValueFrom(this.http.get<string>("api/videos/shots" + shotID + "")); 
   }
 
-  public async submitVideo() : Promise<Array<string>> {
-    return lastValueFrom(this.http.get<Array<string>>("api/videos/shots/submit")); 
-  }
-
   public async login(username : string, password : string) {
     const reponse = this.userService.postApiV2Login({username : username, password : password});
     return lastValueFrom(reponse)
@@ -41,6 +37,10 @@ export class SearchRestService {
 
   public async evalId(session : string){
     return lastValueFrom(this.evaluationClientService.getApiV2ClientEvaluationList(session));
+  }
+
+  public async submitVideo(session : string, taskName : string, answers : Array<ApiClientAnswer>){
+
   }
   
   

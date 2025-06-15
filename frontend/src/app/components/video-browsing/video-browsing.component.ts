@@ -17,7 +17,18 @@ export class VideoBrowsingComponent {
   }
     
   openVideo(shotId : string) {
+    // this.service.getVideo
     this.videoService.currentShot = shotId;
+    
+    console.log("searching for similar keyshots of video : " + shotId);
+    this.service.getVideosFromSimilarity(shotId)
+      .then((list : Array<string>) => {
+        this.videoService.similarShots.set(list);
+      })
+      .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
+      });
+
+    console.log(this.videoService.similarShots)
     this.router.navigate(['video', shotId])
   }
 
