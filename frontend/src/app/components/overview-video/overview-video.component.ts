@@ -41,9 +41,11 @@ export class OverviewVideoComponent implements AfterViewInit {
   }
 
   onSubmitVideoAction() {
-    this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), this.videoService.customStartStamp, this.videoService.customEndStamp);
-    // 1 -> start
-    // 2 -> end
+    const confirmed = window.confirm('Are you sure you want to submit?');
+    if (confirmed) {
+      console.log('Submitting...');
+      this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), this.videoService.customStartStamp, this.videoService.customEndStamp);
+    }
   }
 
   // Fonction pour définir le start stamp personnalisé

@@ -2,36 +2,40 @@
     <div class="video-panel">
       <h3>Video: {{ this.videoService.trim(this.videoService.currentShotID) }}</h3>
       <video #mainVideo [src]="'http://localhost:8000/media/videos/' + this.videoService.trim(this.videoService.currentShotID) + '.mp4'" controls width="100%"></video>
+      
+      <div class="button-group">
       <button class="submit-btn" (click)="onSubmitVideoAction()">Submit</button>
-
-      <!-- Boutons pour définir les timestamps personnalisés -->
       <div class="timestamp-controls">
-        <button class="timestamp-btn" (click)="setCustomStart()">Set start</button>
-        <button class="timestamp-btn" (click)="setCustomEnd()">Set end</button>
+        <div class="timestamp-group">
+          <button class="timestamp-btn" (click)="setCustomStart()">Set start</button>
+          <div class="info-item">
+            <strong>Start timestamp:</strong> {{ this.videoService.customStartStamp }} ms
+          </div>
+        </div>
+        
+        <div class="timestamp-group">
+          <button class="timestamp-btn" (click)="setCustomEnd()">Set end</button>
+          <div class="info-item">
+            <strong>End timestamp:</strong> {{ this.videoService.customEndStamp }} ms
+          </div>
+        </div>
       </div>
-
-      <!-- Affichage des timestamps personnalisés -->
-      <div class="custom-timestamps">
-        <div class="info-item">
-          <strong>Submission start timestamp:</strong> {{ this.videoService.customStartStamp }} ms
-        </div>
-        <div class="info-item">
-          <strong>Submission end timestamp:</strong> {{ this.videoService.customEndStamp }} ms
-        </div>
       </div>
 
       <h3 style="margin-top: 10px;">Clip: {{ this.videoService.currentShotID }}</h3>
       <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShotID) + '/clips/' + this.videoService.currentShotID + '.mp4'" controls width="100%"></video>
       
       <!-- Liste des informations du shot -->
-      <div class="shot-info" *ngIf="this.videoService.currentShot">
+      <div class="button-group">
+      <button class="timestamp-btn" (click)="this.setVideoToStartStamp()">Go to clip start</button>
+      <div class="timestamp-controls" *ngIf="this.videoService.currentShot">
         <div class="info-item">
           <strong>Start stamp:</strong> {{ this.videoService.currentShot.start_stamp }} ms
         </div>
         <div class="info-item">
           <strong>End stamp:</strong> {{ this.videoService.currentShot.end_stamp }} ms
         </div>
-        <button class="timestamp-btn" (click)="this.setVideoToStartStamp()">Go to clip start</button>
+      </div>
       </div>
     </div>
   

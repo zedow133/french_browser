@@ -28,8 +28,8 @@
   background-color: #3ba17a;
   color: white;
   border: none;
-  padding: 12px 24px;
-  margin-top: 10px;
+  padding: 0px 24px;
+  margin-top: 5px;
   cursor: pointer;
   border-radius: 4px;
   font-size: large;
@@ -43,8 +43,8 @@
   background-color: #84d6b7;
   color: rgb(0, 0, 0);
   border: none;
-  padding: 10px 18px;
-  margin: 5px;
+  padding: 12px 20px;
+  margin: 2px;
   cursor: pointer;
   border-radius: 4px;
   font-size: normal;
@@ -63,18 +63,27 @@
   border-radius: 4px;
 }
 
-.timestamp-controls {
+.button-group{
   display: flex;
+  flex-direction: row;
+  width: 100%;
   gap: 10px;
   margin: 10px 0;
 }
 
-.shot-info {
-  font-weight: normal;
+.timestamp-controls {
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  width: 100%;
+  gap: 10px;
+  margin: 10px 0;
 }
 
-.info-item {
-  font-weight: normal;
+.timestamp-group {
+  display: flex;
+  flex-direction: row;
+  gap: 5px;
 }
 
 .keyframes-panel {
@@ -89,12 +98,6 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
-}
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
 }
 
 .btn {
@@ -164,6 +167,21 @@
 
 .video-thumbnail:hover .video-overlay {
   opacity: 1;
+}
+
+/* Style simple et propre pour info-item */
+.info-item {
+  width: 100%;
+  background: #f8f9fa;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 6px;
+  border-left: 3px solid #3ba17a;
+}
+
+.info-item strong {
+  color: #333;
+  font-weight: 600;
 }
 
 /* Responsive */
