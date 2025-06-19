@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, AfterViewInit, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { VideoService } from '../../services/video.service';
 import { SearchRestService } from '../../services/search-rest.service';
@@ -46,7 +46,7 @@ export class OverviewVideoComponent implements AfterViewInit {
     const confirmed = window.confirm('Are you sure you want to submit?');
     if (confirmed) {
       console.log('Submitting...');
-      this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.currentShotID), this.videoService.customStartStamp, this.videoService.customEndStamp);
+      this.service.submitVideo(this.videoService.evaluationId, this.videoService.sessionId, this.videoService.trim(this.videoService.trim(this.videoService.currentKeyframeName)), this.videoService.customStartStamp, this.videoService.customEndStamp);
     }
   }
 
@@ -68,11 +68,11 @@ export class OverviewVideoComponent implements AfterViewInit {
   }
 
   // Open Similar Keyframe video
-  openVideo(shotId : string){
-    this.videoService.currentShotID = shotId;
+  openVideo(keyframeName : string){
+    this.videoService.currentKeyframeName = keyframeName;
     
     // Retrieve the selected shot
-    this.service.getShot(shotId)
+    this.service.getShot(keyframeName)
     .then((shot : any) => {
       this.videoService.currentShot = shot;
       this.videoService.customStartStamp = shot.start_stamp;
@@ -80,19 +80,19 @@ export class OverviewVideoComponent implements AfterViewInit {
       this.setVideoToStartStamp();
     })
 
-    console.log("searching for similar keyshots of video : " + shotId);
+    console.log("searching for similar keyshots of video : " + this.videoService.trim(keyframeName));
 
     // Retrieve the selected similar keyframes
-    this.service.getVideosFromSimilarity(shotId)
+    this.service.getVideosFromSimilarity(keyframeName)
       .then((list : Array<string>) => {
-        this.videoService.similarShots.set(list);
+        this.videoService.similarKeyframes.set(list);
       })
       .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
       });
 
-    console.log(this.videoService.similarShots)
+    console.log(this.videoService.similarKeyframes)
 
-    this.router.navigate(['video', shotId])
+    this.router.navigate(['video', this.videoService.trim(keyframeName)])
   }
   
 }

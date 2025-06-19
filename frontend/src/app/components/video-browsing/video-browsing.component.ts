@@ -17,29 +17,29 @@ export class VideoBrowsingComponent {
   }
     
   // Open the video selected 
-  openVideo(shotId : string) {
-    this.videoService.currentShotID = shotId;
+  openVideo(keyframeName : string) {
+    this.videoService.currentKeyframeName = keyframeName;
 
-    // Retrieve the video from the shotID
-    this.service.getShot(shotId)
+    // Retrieve the video from the keyframe_name
+    this.service.getShot(keyframeName)
       .then((shot : any) => {
         this.videoService.currentShot = shot;
         this.videoService.customStartStamp = shot.start_stamp;
         this.videoService.customEndStamp = shot.end_stamp;
       }).then(() => {
-        this.router.navigate(['video', shotId])
+        this.router.navigate(['video', this.videoService.trim(keyframeName)])
       });
     
     // Retrieve the similar keyframes to the selected one
-    console.log("searching for similar keyshots of video : " + shotId);
-    this.service.getVideosFromSimilarity(shotId)
+    console.log("searching for similar keyshots of video : " + keyframeName);
+    this.service.getVideosFromSimilarity(keyframeName)
       .then((list : Array<string>) => {
-        this.videoService.similarShots.set(list);
+        this.videoService.similarKeyframes.set(list);
       }).then()
       .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
       });
 
-    console.log(this.videoService.similarShots)
+    console.log(this.videoService.similarKeyframes)
   }
 
 }

@@ -2,11 +2,12 @@ import os
 import sys
 from pathlib import Path
 import torch
+import tempfile
 import pickle
 from transnetv2 import TransNetV2
 
-from shot_extraction import get_video_fps, detect_shots_with_transnet, extract_keyframe, extract_video_clip
-from analysis_keyframes_clip import init as clip_init, single_embedding, all_embeddings
+from shot_extraction import get_video_fps, detect_shots_with_transnet, extract_keyframes, extract_video_clip
+from analysis_keyframes_clip import init as clip_init, all_embeddings
 from util_db import ShotsDatabase
 
 def process_single_video(video_path, transnet_model, clip_model, preprocess, device, db, data_dir):
@@ -17,11 +18,9 @@ def process_single_video(video_path, transnet_model, clip_model, preprocess, dev
     video_output_dir = os.path.join(data_dir, video_name)
     keyframes_dir = os.path.join(video_output_dir, "keyframes")
     clips_dir = os.path.join(video_output_dir, "clips")
-    timestamps_dir = os.path.join(video_output_dir, "timestamps")
     
     os.makedirs(keyframes_dir, exist_ok=True)
     os.makedirs(clips_dir, exist_ok=True)
-    os.makedirs(timestamps_dir, exist_ok=True)
     
     fps = get_video_fps(video_path)
     
@@ -32,23 +31,19 @@ def process_single_video(video_path, transnet_model, clip_model, preprocess, dev
         
         shot_id = video_name + '_' + str(i)
 
-        keyframe_filename = f"{shot_id}.jpg"
-        keyframe_path = os.path.join(keyframes_dir, keyframe_filename)
-        extract_keyframe(video_path, start_frame, end_frame, fps, keyframe_path)
-
         clip_filename = f"{shot_id}.mp4"
         clip_path = os.path.join(clips_dir, clip_filename)
         extract_video_clip(video_path, start_frame, end_frame, fps, clip_path)
 
-        image_embedding = single_embedding(keyframe_path, preprocess, device, clip_model)
+        keyframes_names, keyframes_embeddings = extract_keyframes(video_path, start_frame, end_frame, fps, keyframes_dir, shot_id, 10, device, clip_model, preprocess)
 
-        db.insert_shot(
-            shot_id = shot_id,
-            source = video_name,
-            start_stamp = round((start_frame / fps) * 1000),
-            end_stamp = round((end_frame / fps) * 1000),
-            embedding = image_embedding
-        )
+        for j in range(len(keyframes_names)):
+            db.insert_shot(
+                keyframe_name = keyframes_names[j],
+                start_stamp = round((start_frame / fps) * 1000),
+                end_stamp = round((end_frame / fps) * 1000),
+                embedding = keyframes_embeddings[j]
+            )
 
 def main():
     #Arguments parsing
