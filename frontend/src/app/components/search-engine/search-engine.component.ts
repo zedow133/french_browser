@@ -5,8 +5,6 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { VideoBrowsingComponent } from '../video-browsing/video-browsing.component';
 import { VideoService } from '../../services/video.service';
-import { response } from 'express';
-
 
 @Component({
   selector: 'app-search-engine',
@@ -37,20 +35,20 @@ export class SearchEngineComponent implements OnInit{
   // Reset the search to its original state
   resetSearch() {
     console.log("reseting");
-    this.videoService.shots.set([]);
+    this.videoService.keyframeNames.set([]);
     this.query = "";
   }
 
-  // Search for keyframes/shots using the query
+  // Search for keyframes using the query
   search(){
     console.log("searching for : " + this.query);
     this.service.getVideosFromTextQuery(this.query)
     .then((list : Array<string>) => {
-      this.videoService.shots.set(list);
+      this.videoService.keyframeNames.set(list);
     })
     .catch((err: unknown) => { console.error("Error when retrieving the keyframes : ", err); 
     });
-    console.log(this.videoService.shots)
+    console.log(this.videoService.keyframeNames)
   }
 
 }

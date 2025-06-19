@@ -20,16 +20,16 @@ export class SearchRestService {
     return lastValueFrom(this.http.get<Array<string>>(url));  
   }
 
-  // Retrieve the keyframes corresponding to the keyframe/shotID in similarity order
-  public async getVideosFromSimilarity(shotID : string) : Promise<Array<string>> {
+  // Retrieve the keyframes corresponding to the keyframe in similarity order
+  public async getVideosFromSimilarity(keyframe_name : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/similarity/';
-    const url = `${apiUrl}?shot_id=${encodeURIComponent(shotID)}`;
+    const url = `${apiUrl}?keyframe_name=${encodeURIComponent(keyframe_name)}`;
     return lastValueFrom(this.http.get<Array<string>>(url));
   }
 
   // Retrieve the shot information
-  public async getShot(shotID : string) : Promise<string> {
-    return lastValueFrom(this.http.get<any>("api/get_shot/" + shotID)); 
+  public async getShot(keyframe_name : string) : Promise<string> {
+    return lastValueFrom(this.http.get<any>("api/get_shot/" + keyframe_name)); 
   }
 
   // Login to the Dres server

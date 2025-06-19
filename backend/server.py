@@ -41,15 +41,14 @@ async def root():
     return {"message": "API french_browser - alive"}
 
 class ShotResponse(BaseModel):
-    shot_id: str
-    source: str
+    keyframe_name: str
     start_stamp: int
     end_stamp: int
 
-@app.get("/api/get_shot/{shot_id}", response_model=ShotResponse)
-async def get_shot(shot_id: str):
+@app.get("/api/get_shot/{keyframe_name}", response_model=ShotResponse)
+async def get_shot(keyframe_name: str):
     """Get a shot by its ID"""
-    shot = db.get_shot(shot_id)
+    shot = db.get_shot(keyframe_name)
     if not shot:
         raise HTTPException(status_code=404, detail="Shot not found")
     return shot
@@ -61,9 +60,9 @@ async def search_text(query: str = Query()):
     return top_k
 
 @app.get("/api/search/similarity/")
-async def search_similarity(shot_id: str):
+async def search_similarity(keyframe_name: str):
     """Perform similarity search, given an image query to find similar images"""
-    found, keyframe_embedding = db.get_embedding(shot_id)
+    found, keyframe_embedding = db.get_embedding(keyframe_name)
     if not found:
         raise HTTPException(status_code=404, detail="Shot not found")
     top_k = image_similarity(keyframe_embedding, images_embeddings, images_names, 20)

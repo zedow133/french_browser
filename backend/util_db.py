@@ -15,8 +15,7 @@ class ShotsDatabase:
         
         cursor.execute('''
             CREATE TABLE IF NOT EXISTS shots (
-                shot_id TEXT PRIMARY KEY,
-                source TEXT NOT NULL,
+                keyframe_name TEXT PRIMARY KEY,
                 start_stamp INTEGER NOT NULL,
                 end_stamp INTEGER NOT NULL,
                 embedding BLOB NOT NULL
@@ -42,7 +41,7 @@ class ShotsDatabase:
 
         return tensor
     
-    def insert_shot(self, shot_id: str, source: str, 
+    def insert_shot(self, keyframe_name: str,
                    start_stamp: int, end_stamp: int, 
                    embedding: torch.Tensor) -> bool:
         try:
@@ -51,7 +50,7 @@ class ShotsDatabase:
             
             embedding_blob = self._serialize_tensor(embedding)
             
-            cursor.execute('''INSERT INTO shots (shot_id, source, start_stamp, end_stamp, embedding) VALUES (?, ?, ?, ?, ?)''', (shot_id, source, start_stamp, end_stamp, embedding_blob))
+            cursor.execute('''INSERT INTO shots (keyframe_name, start_stamp, end_stamp, embedding) VALUES (?, ?, ?, ?)''', (keyframe_name, start_stamp, end_stamp, embedding_blob))
             
             conn.commit()
             conn.close()
@@ -62,54 +61,30 @@ class ShotsDatabase:
             print(f"Erreur lors de l'insertion: {e}")
             return False
     
-    def get_shot(self, shot_id: str) -> Optional[Dict[str, Any]]:
+    def get_shot(self, keyframe_name: str) -> Optional[Dict[str, Any]]:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM shots WHERE shot_id = ?', (shot_id,))
+        cursor.execute('SELECT * FROM shots WHERE keyframe_name = ?', (keyframe_name,))
         row = cursor.fetchone()
         conn.close()
         
         if row:
             return {
-                'shot_id': row[0],
-                'source': row[1],
-                'start_stamp': row[2],
-                'end_stamp': row[3],
+                'keyframe_name': row[0],
+                'start_stamp': row[1],
+                'end_stamp': row[2],
             }
         return None
     
-    def get_embedding(self, shot_id: str) -> Optional[Any]:
+    def get_embedding(self, keyframe_name: str) -> Optional[Any]:
         conn = sqlite3.connect(self.db_path)
         cursor = conn.cursor()
         
-        cursor.execute('SELECT * FROM shots WHERE shot_id = ?', (shot_id,))
+        cursor.execute('SELECT * FROM shots WHERE keyframe_name = ?', (keyframe_name,))
         row = cursor.fetchone()
         conn.close()
         
         if row:
-            return True, self._deserialize_tensor(row[4])
+            return True, self._deserialize_tensor(row[3])
         return False, None
-
-    def get_all_shots(self) -> List[Dict[str, Any]]:
-        conn = sqlite3.connect(self.db_path)
-        cursor = conn.cursor()
-        
-        cursor.execute('SELECT * FROM shots')
-        
-        rows = cursor.fetchall()
-        conn.close()
-        
-        shots = []
-        for row in rows:
-            embedding = self._deserialize_tensor(row[4])
-            
-            shots.append({
-                'shot_id': row[0],
-                'source': row[1],
-                'start_stamp': row[2],
-                'end_stamp': row[3],
-                'embedding': embedding
-            })
-        
-        return shots
