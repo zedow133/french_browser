@@ -1,0 +1,49 @@
+.header {
+  background: linear-gradient(135deg, #3ba17a, #3ba17a);
+  color: white;
+  padding: 8px 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: fixed;  /* Fixe le header en haut */
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;   /* Au-dessus des autres éléments */
+}
+
+.header h1 {
+  font-family: 'Poppins', sans-serif;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.main-content {
+  margin-top: 60px; /* Espace pour le header fixe */
+  height: calc(100vh - 60px);
+}
+
+
+.btn {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 3px;
+  cursor: pointer;
+  font-size: 26px;
+}
+
+.btn-primary {
+  background: #3ba17a;
+  color: white;
+  font-weight: 900;
+}
+
+.btn-secondary {
+  background: #ecf0f1;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn:hover {
+  opacity: 0.9;
+}

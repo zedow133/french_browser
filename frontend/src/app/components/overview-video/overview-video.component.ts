@@ -19,10 +19,6 @@ export class OverviewVideoComponent implements AfterViewInit {
   constructor(public readonly router : Router, public readonly videoService : VideoService, public readonly service : SearchRestService){
   }
 
-  homepage(){
-    this.router.navigate([''])
-  }
-
   ngAfterViewInit() {
     // Écouter l'événement loadedmetadata pour s'assurer que la vidéo est chargée
     if (this.mainVideo && this.mainVideo.nativeElement) {

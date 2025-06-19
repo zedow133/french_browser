@@ -1,35 +1,25 @@
-<header class="header">
-    <h1>French Browser</h1>
-  </header>
-  
-  <div class="main-container">
-    <aside class="sidebar">
-      <div class="search-section">
-        <button class="btn btn-primary" (click)="resetSearch()">Reset Search</button>
-      </div>
-  
-      <div class="form-group">
-        <label class="section-title">Dataset : V3C-1</label>
-      </div>
-  
-      <div class="button-group">
-        <button class="btn btn-primary">Text Search</button> <!-- todo : afficher la recherche par requête textuelle -->
-        <button class="btn btn-primary">Image Search</button> <!-- todo : afficher la recherche par requête textuelle -->
-      </div>
-  
-      <div class="form-group" style="margin-top: 30px;">
-        <label for="query" class="section-title"> Query </label>
-        <input type="text" id="query" [(ngModel)]="query" placeholder="A man on a bike">
-      </div>
-  
-      <div class="button-group">
-        <button class="btn btn-secondary" (click)="addQuery()">Add</button>
-        <button class="btn btn-primary" (click)="search()">Search</button>
-      </div>
-  
-    </aside>
+<div class="main-container">
+  <aside class="sidebar">
+    <div class="search-section">
+      <button class="btn btn-primary" (click)="resetSearch()">Reset Search</button>
+    </div>
 
-    <app-video-browsing></app-video-browsing>
+    <div class="form-group">
+      <label class="section-title">Dataset : V3C-1</label>
+    </div>
+
+    <div class="form-group" style="margin-top: 30px;">
+      <label for="query" class="section-title"> Query </label>
+      <input class="styled-input" type="text" id="query" [(ngModel)]="query" placeholder="A man on a bike">
+    </div>
+
+    <div class="button-group">
+      <button class="btn btn-primary" (click)="search()">Search</button>
+    </div>
+  </aside>
+
+  <app-video-browsing></app-video-browsing>
+
   </div>
 
   
