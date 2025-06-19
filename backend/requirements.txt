@@ -10,3 +10,4 @@ pillow==11.0.0
 ffmpeg-python==0.2.0
 uvicorn==0.34.3
 transnetv2==1.0.0
+scikit-learn==1.7.0
