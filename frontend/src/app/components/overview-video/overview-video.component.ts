@@ -20,19 +20,20 @@ export class OverviewVideoComponent implements AfterViewInit {
   }
 
   ngAfterViewInit() {
-    // Écouter l'événement loadedmetadata pour s'assurer que la vidéo est chargée
+    // Wait for the video to be loaded
     if (this.mainVideo && this.mainVideo.nativeElement) {
       this.mainVideo.nativeElement.addEventListener('loadedmetadata', () => {
         this.setVideoToStartStamp();
       });
       
-      // Si la vidéo est déjà chargée
+      // If video is already loaded
       if (this.mainVideo.nativeElement.readyState >= 1) {
         this.setVideoToStartStamp();
       }
     }
   }
 
+  // Start the video at the start of the shot
   setVideoToStartStamp() {
     if (this.videoService.currentShot && this.videoService.currentShot.start_stamp && this.mainVideo) {
       const startTimeInSeconds = this.videoService.currentShot.start_stamp / 1000;
@@ -40,6 +41,7 @@ export class OverviewVideoComponent implements AfterViewInit {
     }
   }
 
+  // Submit the video and ask for confirmation
   onSubmitVideoAction() {
     const confirmed = window.confirm('Are you sure you want to submit?');
     if (confirmed) {
@@ -48,25 +50,28 @@ export class OverviewVideoComponent implements AfterViewInit {
     }
   }
 
-  // Fonction pour définir le start stamp personnalisé
-  setCustomStart() {
+  // Customization of the start and end timestamps for submission 
+  setCustomStamp(stamp : string) {
     if (this.mainVideo && this.mainVideo.nativeElement) {
-      this.videoService.customStartStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000); // Convertir en millisecondes
-      console.log('Custom start stamp set to:', this.videoService.customStartStamp);
+      if(stamp == "start"){
+        this.videoService.customStartStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000); 
+        console.log('Custom start stamp set to:', this.videoService.customStartStamp);
+      }
+      else if (stamp == "end"){
+        this.videoService.customEndStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000);
+        console.log('Custom end stamp set to:', this.videoService.customEndStamp);
+      }
+      else {
+        console.error("Invalid stamp")
+      }
     }
   }
 
-  // Fonction pour définir le end stamp personnalisé
-  setCustomEnd() {
-    if (this.mainVideo && this.mainVideo.nativeElement) {
-      this.videoService.customEndStamp = Math.round(this.mainVideo.nativeElement.currentTime * 1000); // Convertir en millisecondes
-      console.log('Custom end stamp set to:', this.videoService.customEndStamp);
-    }
-  }
-
+  // Open Similar Keyframe video
   openVideo(shotId : string){
     this.videoService.currentShotID = shotId;
     
+    // Retrieve the selected shot
     this.service.getShot(shotId)
     .then((shot : any) => {
       this.videoService.currentShot = shot;
@@ -76,6 +81,8 @@ export class OverviewVideoComponent implements AfterViewInit {
     })
 
     console.log("searching for similar keyshots of video : " + shotId);
+
+    // Retrieve the selected similar keyframes
     this.service.getVideosFromSimilarity(shotId)
       .then((list : Array<string>) => {
         this.videoService.similarShots.set(list);

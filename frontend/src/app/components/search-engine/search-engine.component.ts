@@ -21,6 +21,7 @@ export class SearchEngineComponent implements OnInit{
   public constructor(private readonly router: Router, private readonly service : SearchRestService, private readonly videoService : VideoService) {
   }
 
+  // When component is initialized : login to the DRES server & retrieve the current evaluationID
   public ngOnInit() {
     const log = this.service.login("TECHtalent05", "wv6atMjT");
     log.then((response : any) => 
@@ -33,19 +34,16 @@ export class SearchEngineComponent implements OnInit{
         });
   }
 
+  // Reset the search to its original state
   resetSearch() {
     console.log("reseting");
     this.videoService.shots.set([]);
     this.query = "";
   }
 
-  addQuery(){
-    console.log("adding query");
-  }
-
+  // Search for keyframes/shots using the query
   search(){
     console.log("searching for : " + this.query);
-    //  utiliser les queries pour les envoyer dans un service
     this.service.getVideosFromTextQuery(this.query)
     .then((list : Array<string>) => {
       this.videoService.shots.set(list);

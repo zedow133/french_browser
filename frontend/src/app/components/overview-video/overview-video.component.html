@@ -3,18 +3,19 @@
       <h3>Video: {{ this.videoService.trim(this.videoService.currentShotID) }}</h3>
       <video #mainVideo [src]="'http://localhost:8000/media/videos/' + this.videoService.trim(this.videoService.currentShotID) + '.mp4'" controls width="100%"></video>
       
+      <!-- Submission information -->
       <div class="button-group">
       <button class="submit-btn" (click)="onSubmitVideoAction()">Submit</button>
       <div class="timestamp-controls">
         <div class="timestamp-group">
-          <button class="timestamp-btn" (click)="setCustomStart()">Set start</button>
+          <button class="timestamp-btn" (click)="setCustomStamp('start')">Set start</button>
           <div class="info-item">
             <strong>Start timestamp:</strong> {{ this.videoService.customStartStamp }} ms
           </div>
         </div>
         
         <div class="timestamp-group">
-          <button class="timestamp-btn" (click)="setCustomEnd()">Set end</button>
+          <button class="timestamp-btn" (click)="setCustomStamp('end')">Set end</button>
           <div class="info-item">
             <strong>End timestamp:</strong> {{ this.videoService.customEndStamp }} ms
           </div>
@@ -25,7 +26,7 @@
       <h3 style="margin-top: 10px;">Clip: {{ this.videoService.currentShotID }}</h3>
       <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.currentShotID) + '/clips/' + this.videoService.currentShotID + '.mp4'" controls width="100%"></video>
       
-      <!-- Liste des informations du shot -->
+      <!-- Shot information -->
       <div class="button-group">
       <button class="timestamp-btn" (click)="this.setVideoToStartStamp()">Go to clip start</button>
       <div class="timestamp-controls" *ngIf="this.videoService.currentShot">
@@ -39,6 +40,7 @@
       </div>
     </div>
   
+    <!-- Similar keyframes to the shot keyframe -->
     <div class="keyframes-panel">
       <h3>Similar keyframes</h3>
       <div class="keyframes-grid">

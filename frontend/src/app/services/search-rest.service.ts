@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { last, lastValueFrom, map } from 'rxjs';
-import { Shot } from '../models/shot';
-import { UserService, LoginRequest, EvaluationClientService, ApiClientAnswer, SubmissionService, ApiClientSubmission} from '../../../openapi/dres';
+import { lastValueFrom, } from 'rxjs';
+import { UserService, EvaluationClientService, SubmissionService, ApiClientSubmission} from '../../../openapi/dres';
 
 @Injectable({
   providedIn: 'root'
@@ -14,31 +13,37 @@ export class SearchRestService {
     private readonly evaluationClientService : EvaluationClientService,
     private readonly submissionService : SubmissionService) { }
 
+  // Retrieve the keyframes corresponding to the query in similarity order
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/text';
     const url = `${apiUrl}?query=${encodeURIComponent(query)}`;
     return lastValueFrom(this.http.get<Array<string>>(url));  
   }
 
+  // Retrieve the keyframes corresponding to the keyframe/shotID in similarity order
   public async getVideosFromSimilarity(shotID : string) : Promise<Array<string>> {
     const apiUrl = '/api/search/similarity/';
     const url = `${apiUrl}?shot_id=${encodeURIComponent(shotID)}`;
     return lastValueFrom(this.http.get<Array<string>>(url));
   }
 
+  // Retrieve the shot information
   public async getShot(shotID : string) : Promise<string> {
     return lastValueFrom(this.http.get<any>("api/get_shot/" + shotID)); 
   }
 
+  // Login to the Dres server
   public async login(username : string, password : string) {
     const reponse = this.userService.postApiV2Login({username : username, password : password});
     return lastValueFrom(reponse)
   }
 
+  // Retrieve the evaluationID of the current task of the Dres server
   public async evalId(session : string){
     return lastValueFrom(this.evaluationClientService.getApiV2ClientEvaluationList(session));
   }
 
+  // Submit video by constructing the answer
   public async submitVideo(evaluationId : string, sessionId : string, mediaName : string, start : number, end : number, text? : string){
     const submission: ApiClientSubmission = {
       answerSets: [

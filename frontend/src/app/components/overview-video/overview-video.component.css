@@ -169,7 +169,6 @@
   opacity: 1;
 }
 
-/* Style simple et propre pour info-item */
 .info-item {
   width: 100%;
   background: #f8f9fa;
@@ -184,7 +183,6 @@
   font-weight: 600;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .main-container {
     flex-direction: column;

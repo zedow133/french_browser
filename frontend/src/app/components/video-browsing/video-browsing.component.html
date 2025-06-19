@@ -1,5 +1,6 @@
 <main class="content-area">
 
+  <!-- Shot/Keyframes display after query search -->
  <div class="video-grid">
    <div *ngFor="let shot of this.videoService.shots()" class="video-thumbnail" (click)="openVideo(shot)">
      <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(shot) + '/keyframes/' + shot + '.jpg'" alt="Video thumbnail">

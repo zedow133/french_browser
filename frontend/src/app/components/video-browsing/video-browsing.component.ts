@@ -16,10 +16,11 @@ export class VideoBrowsingComponent {
   public constructor(private readonly router: Router, public readonly service : SearchRestService, public readonly videoService : VideoService) {
   }
     
+  // Open the video selected 
   openVideo(shotId : string) {
-    // this.service.getVideo
     this.videoService.currentShotID = shotId;
 
+    // Retrieve the video from the shotID
     this.service.getShot(shotId)
       .then((shot : any) => {
         this.videoService.currentShot = shot;
@@ -29,6 +30,7 @@ export class VideoBrowsingComponent {
         this.router.navigate(['video', shotId])
       });
     
+    // Retrieve the similar keyframes to the selected one
     console.log("searching for similar keyshots of video : " + shotId);
     this.service.getVideosFromSimilarity(shotId)
       .then((list : Array<string>) => {

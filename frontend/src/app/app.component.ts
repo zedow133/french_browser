@@ -14,6 +14,7 @@ export class AppComponent {
   constructor(public readonly router : Router){
   }
   
+  // Routing to the homepage when clicking on the app name
   homepage(){
     this.router.navigate([''])
   }
