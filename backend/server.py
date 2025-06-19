@@ -56,7 +56,7 @@ async def get_shot(keyframe_name: str):
 @app.get("/api/search/text/")
 async def search_text(query: str = Query()):
     """Perform similarity search, given a text query to find similar images"""
-    top_k = text_query_keyframes(query, images_embeddings, images_names, 20, model, device)
+    top_k = text_query_keyframes(query, images_embeddings, images_names, 100, model, device)
     return top_k
 
 @app.get("/api/search/similarity/")
@@ -65,7 +65,7 @@ async def search_similarity(keyframe_name: str):
     found, keyframe_embedding = db.get_embedding(keyframe_name)
     if not found:
         raise HTTPException(status_code=404, detail="Shot not found")
-    top_k = image_similarity(keyframe_embedding, images_embeddings, images_names, 20)
+    top_k = image_similarity(keyframe_embedding, images_embeddings, images_names, 100)
     return top_k
 
 if __name__ == "__main__":

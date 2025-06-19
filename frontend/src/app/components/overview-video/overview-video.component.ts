@@ -86,6 +86,8 @@ export class OverviewVideoComponent implements AfterViewInit {
     this.service.getVideosFromSimilarity(keyframeName)
       .then((list : Array<string>) => {
         this.videoService.similarKeyframes.set(list);
+        this.videoService.filterKeyframes();
+        this.videoService.filterSimilarKeyFrames();
       })
       .catch((err: unknown) => { console.error("Error when retrieving the similar keyframes : ", err); 
       });

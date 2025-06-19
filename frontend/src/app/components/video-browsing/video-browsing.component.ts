@@ -26,16 +26,18 @@ export class VideoBrowsingComponent {
         this.videoService.currentShot = shot;
         this.videoService.customStartStamp = shot.start_stamp;
         this.videoService.customEndStamp = shot.end_stamp;
-      }).then(() => {
-        this.router.navigate(['video', this.videoService.trim(keyframeName)])
-      });
+      }).then();
     
     // Retrieve the similar keyframes to the selected one
     console.log("searching for similar keyshots of video : " + keyframeName);
     this.service.getVideosFromSimilarity(keyframeName)
       .then((list : Array<string>) => {
         this.videoService.similarKeyframes.set(list);
-      }).then()
+        this.videoService.filterKeyframes();
+        this.videoService.filterSimilarKeyFrames();
+      }).then(() => 
+        this.router.navigate(['video', this.videoService.trim(keyframeName)])
+      )
       .catch((err: unknown) => { console.error("Error when retrieving similar keyframes : ", err); 
       });
 

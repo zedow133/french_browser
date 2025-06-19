@@ -23,7 +23,7 @@
       </div>
       </div>
 
-      <h3 style="margin-top: 10px;">Clip: {{ this.videoService.trim(this.videoService.currentKeyframeName) }}</h3>
+      <h3 style="margin-top: 10px;">Clip: {{ this.videoService.trim(this.videoService.currentKeyframeName) }}    from {{ this.videoService.currentKeyframeName }}</h3>
       <video [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.trim(this.videoService.currentKeyframeName)) + '/clips/' + this.videoService.trim(this.videoService.currentKeyframeName) + '.mp4'" controls width="100%"></video>
       
       <!-- Shot information -->
@@ -40,7 +40,17 @@
       </div>
     </div>
   
-    <!-- Similar keyframes to the shot keyframe -->
+    <div class="panel">
+    <!-- Other keyframes of the shot -->
+    <div class="keyframes-panel">
+      <h3>Keyframes from the Same Shot</h3>
+      <div class="keyframes-grid">
+        <div class="video-thumbnail" *ngFor="let keyframeName of this.videoService.keyframesShot()" (click)="openVideo(keyframeName)">
+          <img [src]="'http://localhost:8000/media/shots/' + this.videoService.trim(this.videoService.trim(keyframeName)) + '/keyframes/' + keyframeName + '.jpg'" alt="Video thumbnail">
+        </div>
+      </div>
+    </div>
+
     <div class="keyframes-panel">
       <h3>Similar keyframes</h3>
       <div class="keyframes-grid">
@@ -49,4 +59,5 @@
         </div>
       </div>
     </div>
+  </div>
   </div>
