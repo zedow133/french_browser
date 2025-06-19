@@ -36,7 +36,7 @@ export class VideoBrowsingComponent {
       .then((list : Array<string>) => {
         this.videoService.similarShots.set(list);
       }).then()
-      .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
+      .catch((err: unknown) => { console.error("Error when retrieving similar keyframes : ", err); 
       });
 
     console.log(this.videoService.similarShots)

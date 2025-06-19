@@ -48,7 +48,7 @@ export class SearchEngineComponent implements OnInit{
     .then((list : Array<string>) => {
       this.videoService.shots.set(list);
     })
-    .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots : ", err); 
+    .catch((err: unknown) => { console.error("Error when retrieving the keyframes : ", err); 
     });
     console.log(this.videoService.shots)
   }

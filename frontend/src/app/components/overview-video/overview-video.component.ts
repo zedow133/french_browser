@@ -87,7 +87,7 @@ export class OverviewVideoComponent implements AfterViewInit {
       .then((list : Array<string>) => {
         this.videoService.similarShots.set(list);
       })
-      .catch((err: unknown) => { console.error("Erreur lors de la récupération des shots similaires : ", err); 
+      .catch((err: unknown) => { console.error("Error when retrieving the similar keyframes : ", err); 
       });
 
     console.log(this.videoService.similarShots)
