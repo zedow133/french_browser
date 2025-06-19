@@ -19,20 +19,12 @@ def get_video_fps(video_path):
         fps = float(fps_str)
     return fps
 
-def extract_keyframe(video_path, start_frame, end_frame, fps, output_path):
-    timestamp = ((start_frame + end_frame) // 2) / fps
-    
-    (
-        ffmpeg
-        .input(video_path, ss=timestamp)
-        .output(output_path, vframes=1, **{'q:v': 2})
-        .overwrite_output()
-        .run(quiet=True)
-    )
-
 def extract_keyframes(video_path, start_frame, end_frame, fps, keyframes_dir, shot_id, number_extracted, device, clip_model, preprocess):
     # Extraction de number_extracted keyframes entre start_frame et end_frame dans un dossier temporaire
-    timestamps = [(start_frame + (((i + 1)*(end_frame - start_frame)) // (number_extracted + 1))) / fps for i in range(number_extracted)]
+    safe_start_frame = start_frame + 0.1*(end_frame - start_frame)
+    safe_end_frame = end_frame - 0.1*(end_frame - start_frame)
+
+    timestamps = [(safe_start_frame + (((i + 1)*(safe_end_frame - safe_start_frame)) // (number_extracted + 1))) / fps for i in range(number_extracted)]
 
     temp_dir = tempfile.mkdtemp()
     temp_image_paths = []
