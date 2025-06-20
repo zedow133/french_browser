@@ -1,6 +1,7 @@
 import torch
 import os
 import clip
+from tqdm import tqdm
 import itertools
 from PIL import Image
 
@@ -60,18 +61,18 @@ def single_embedding(imageFile, preprocess, device, model) :
     image_embeddings = model.encode_image(image)
     return image_embeddings
 
-def all_embeddings(image_paths, preprocess, device, model):
-    preprocessed_images = []
-    for image_path in image_paths:
-        preprocessed_image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
-        preprocessed_images.append(preprocessed_image)
-    
+def all_embeddings(image_paths, preprocess, device, model, db_dir):
+    separate_images_encoded = []    
     with torch.no_grad():
-        images_tensor = torch.cat(preprocessed_images)
-        images_features = model.encode_image(images_tensor)
+        for image_path in tqdm(image_paths):
+            preprocessed_image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
+            separate_image_encoded = model.encode_image(preprocessed_image)
+            separate_images_encoded.append(separate_image_encoded)
 
-    return images_features
+        images_features = torch.cat(separate_images_encoded)
 
+    torch.save(images_features, os.path.join(db_dir, 'all_keyframes_embeddings.pt'))
+    
 def main() : 
     device, model, preprocess = init()
 

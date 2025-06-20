@@ -15,7 +15,7 @@ export class SearchRestService {
 
   // Retrieve the keyframes corresponding to the query in similarity order
   public async getVideosFromTextQuery(query : string) : Promise<Array<string>> {
-    const apiUrl = '/api/search/text';
+    const apiUrl = '/api/search/text/';
     const url = `${apiUrl}?query=${encodeURIComponent(query)}`;
     return lastValueFrom(this.http.get<Array<string>>(url));  
   }
