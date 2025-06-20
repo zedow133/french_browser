@@ -4,6 +4,7 @@ TransNetV2/
 output/
 __pycache__/
 db/
+db_save/
 node_modules/
 .angular/
 venv/

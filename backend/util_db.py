@@ -88,3 +88,21 @@ class ShotsDatabase:
         if row:
             return True, self._deserialize_tensor(row[3])
         return False, None
+    
+    def get_all_embeddings(self):
+        conn = sqlite3.connect(self.db_path)
+        cursor = conn.cursor()
+        
+        cursor.execute('SELECT * FROM shots')
+        
+        rows = cursor.fetchall()
+        conn.close()
+
+        all_keyframes_names = []
+        all_keyframes_embeddings = []
+
+        for row in rows:
+            all_keyframes_names.append(row[0])
+            all_keyframes_embeddings.append(self._deserialize_tensor(row[3]))
+        
+        return all_keyframes_names, all_keyframes_embeddings
