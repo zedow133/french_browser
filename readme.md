@@ -1,4 +1,3 @@
-
 # French Browser
 
 A video search and analysis application that allows users to search through video content using textual queries and browse keyframes with similarity matching.
@@ -16,14 +15,12 @@ Before installing the application, ensure you have the following installed on yo
 
 ### Backend Setup
 
-1. **Install ffmpeg** (if not already installed)
-
-2. **Navigate to the backend directory**:
+1. **Navigate to the backend directory**:
    ```bash
    cd ./backend/
    ```
 
-3. **Create and activate a Python virtual environment**:
+2. **Create and activate a Python virtual environment**:
    ```bash
    # Create virtual environment
    python -m venv venv
@@ -35,12 +32,12 @@ Before installing the application, ensure you have the following installed on yo
    source venv/bin/activate
    ```
 
-4. **Install Python dependencies**:
+3. **Install Python dependencies**:
    ```bash
    pip install -r requirements.txt
    ```
 
-5. **Install TransNetV2**:
+4. **Install TransNetV2**:
    ```bash
    cd ./TransNetV2/
    python setup.py install
@@ -54,12 +51,7 @@ Before installing the application, ensure you have the following installed on yo
    cd ./frontend/
    ```
 
-2. **Install Angular CLI globally** (if not already installed):
-   ```bash
-   npm install -g @angular/cli
-   ```
-
-3. **Install project dependencies**:
+2. **Install project dependencies**:
    ```bash
    npm install
    ```
@@ -75,7 +67,7 @@ First, you need to generate a database from your video files:
 cd ./backend/
 
 # Put all your videos in a directory, then run:
-python generate_db.py <directory_name>
+python generate_db.py <video_directory_name>
 ```
 
 This will create a `db` folder containing the processed video database.
