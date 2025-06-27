@@ -62,8 +62,8 @@ async def search_text(query: str = Query()):
 @app.get("/api/search/similarity/")
 async def search_similarity(keyframe_name: str):
     """Perform similarity search, given an image query to find similar images"""
-    found, keyframe_embedding = db.get_embedding(keyframe_name)
-    if not found:
+    keyframe_embedding = db.get_embedding(keyframe_name)
+    if not keyframe_embedding:
         raise HTTPException(status_code=404, detail="Shot not found")
     top_k = image_similarity(keyframe_embedding, images_embeddings, images_names, 100)
     return top_k

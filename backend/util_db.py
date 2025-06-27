@@ -54,12 +54,8 @@ class ShotsDatabase:
             
             conn.commit()
             conn.close()
-            return True
-        except sqlite3.IntegrityError:
-            return False
         except Exception as e:
-            print(f"Erreur lors de l'insertion: {e}")
-            return False
+            print(f"Error while inserting: {e}")
     
     def get_shot(self, keyframe_name: str) -> Optional[Dict[str, Any]]:
         conn = sqlite3.connect(self.db_path)
@@ -86,8 +82,8 @@ class ShotsDatabase:
         conn.close()
         
         if row:
-            return True, self._deserialize_tensor(row[3])
-        return False, None
+            return self._deserialize_tensor(row[3])
+        return None
     
     def get_all_embeddings(self):
         conn = sqlite3.connect(self.db_path)

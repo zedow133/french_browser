@@ -60,35 +60,3 @@ def single_embedding(imageFile, preprocess, device, model) :
     image = preprocess(Image.open(imageFile)).unsqueeze(0).to(device)
     image_embeddings = model.encode_image(image)
     return image_embeddings
-
-def all_embeddings(image_paths, preprocess, device, model, db_dir):
-    separate_images_encoded = []    
-    with torch.no_grad():
-        for image_path in tqdm(image_paths):
-            preprocessed_image = preprocess(Image.open(image_path)).unsqueeze(0).to(device)
-            separate_image_encoded = model.encode_image(preprocessed_image)
-            separate_images_encoded.append(separate_image_encoded)
-
-        images_features = torch.cat(separate_images_encoded)
-
-    torch.save(images_features, os.path.join(db_dir, 'all_keyframes_embeddings.pt'))
-    
-def main() : 
-    device, model, preprocess = init()
-
-    folder_path = "db/data/00139/keyframes"
-    images = []
-    image_files = []
-
-    for filename in os.listdir(folder_path):
-        imageFile = os.path.join(folder_path, filename)
-        image = preprocess(Image.open(imageFile)).unsqueeze(0).to(device)
-        images.append(image)
-        image_files.append(filename)
-    
-    text_query_keyframes("a planet with black and white stripes", images, image_files, model, device)
-    #image_similarity("keyframes_test/keyframe_shot_003419.jpg", images, image_files, model, device, preprocess)
-    #text_query_keyframes("db/data/00139/keyframes/00139_1.jpg", preprocess, device, model)
-
-if __name__ == "__main__":
-    main()
