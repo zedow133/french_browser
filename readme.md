@@ -60,7 +60,12 @@ Before installing the application, ensure you have the following installed on yo
 
 ### 1. Generate Database
 
-First, you need to generate a database from your video files:
+> ### ⚠️ **WARNING**
+> The generation of the database can take a very long time, especially when using **CPU**.  
+> It is advised to use the following link to [download the database](https://filesender.renater.fr/?s=download&token=8fc3e510-0b0a-4c77-bb3e-ebfacf75726c&lang=en)  
+> Once downloaded, add the folder to the application backend and directly start the backend server.
+
+If not downloaded, generate a database from your video files:
 
 ```bash
 # Navigate to backend directory
