@@ -47,7 +47,7 @@ class ShotResponse(BaseModel):
 
 @app.get("/api/get_shot/{keyframe_name}", response_model=ShotResponse)
 async def get_shot(keyframe_name: str):
-    """Get a shot by its ID"""
+    """Get a keyframe by its ID"""
     shot = db.get_shot(keyframe_name)
     if not shot:
         raise HTTPException(status_code=404, detail="Shot not found")
@@ -63,7 +63,7 @@ async def search_text(query: str = Query()):
 async def search_similarity(keyframe_name: str):
     """Perform similarity search, given an image query to find similar images"""
     keyframe_embedding = db.get_embedding(keyframe_name)
-    if not keyframe_embedding:
+    if keyframe_embedding is None:
         raise HTTPException(status_code=404, detail="Shot not found")
     top_k = image_similarity(keyframe_embedding, images_embeddings, images_names, 100)
     return top_k
